@@ -51,7 +51,7 @@ class TopicModel(object):
                 doc_ids.append(doc_id)
         return doc_ids
         
-   #méthodes topic
+   #méthodes scaled_view
     def distance_topics(self):
         matrix = np.zeros((self.number_topics,self.number_topics))
         for i in range(self.number_topics):
@@ -67,6 +67,32 @@ class TopicModel(object):
         embedding = MDS(n_components=2,dissimilarity='precomputed')
         topic_coordinates = embedding.fit_transform(self.distance_topics())
         return topic_coordinates
+
+    def topics_frequency(self,date=None):#pourcentages
+        if date==None:
+            matrix = self.document_topic_matrix            
+        else:
+            rows = self.corpus.data[self.corpus.data['date']==date].index
+            matrix = self.document_topic_matrix[rows,:]
+        return np.sum(matrix,axis=0)*100/np.shape(matrix)[0]
+    
+    #évolution importance topics
+    def topic_frequency_per_dates(self, topic_id,date=None):
+        if date==None:
+            return self.topics_frequency_per_dates(self.corpus.years)[topic_id,:]
+        else:
+            return self.topics_frequency_per_dates(self.corpus.years)[topic_id,date]
+
+    def topics_frequency_per_dates(self, dates):
+        frequencies = np.zeros((self.number_topics,len(dates)))
+        for t in range(len(dates)):
+            frequencies[:,t] = self.topics_frequency(dates[t])
+        return frequencies
+            
+        
+        
+        
+        
         
                 
 

@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jul  6 17:42:59 2020
 
-@author: lvallet
-"""
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 
@@ -20,6 +16,7 @@ class Corpus(object):
         self.vector_space_data = vectorizer.fit_transform(self.data['text'])
         index_words = vectorizer.get_feature_names()
         self.index_words = dict([(i, s) for i, s in enumerate(index_words)])
+        self.years = sorted(self.data['date'].unique())
         
     def full_text(self, doc_id):
         return self.data.iloc[doc_id]['text']
