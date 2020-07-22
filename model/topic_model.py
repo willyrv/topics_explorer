@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jul  6 17:28:24 2020
 
-@author: lvallet
-"""
 from sklearn.decomposition import LatentDirichletAllocation as LDA
 import numpy as np
 from operator import itemgetter
@@ -13,7 +9,7 @@ from sklearn.manifold import MDS
 class TopicModel(object):
     def __init__(self,corpus,number_topics):
         self.corpus = corpus  # a Corpus object
-        self.number_topics = number_topics  # a scalar value > 1
+        self.number_topics = number_topics  # a scalar vralue > 1
         
         
         lda = LDA(n_components=number_topics, learning_method='batch')
@@ -34,6 +30,12 @@ class TopicModel(object):
             weighted_words.append((self.corpus.word_for_id(word_id), weight))
         weighted_words.sort(key=itemgetter(1),reverse=True)
         return weighted_words[:nb_words]
+
+    def display_top_words_1topic(self,topic_id,nb_words):
+        top_words = [self.top_words_topic(topic_id,nb_words)[i][0] for i in range(nb_words)]
+        return ', '.join(top_words)
+        
+
         
     #méthodes doc topic
     def topic_distribution_for_doc(self,doc_id):
