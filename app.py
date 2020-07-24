@@ -3,6 +3,7 @@
 
 import dash
 
+
 from model.corpus import Corpus
 from model.topic_model import TopicModel
 from model.visualisation import Views

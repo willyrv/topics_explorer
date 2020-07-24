@@ -90,6 +90,16 @@ class TopicModel(object):
         for t in range(len(dates)):
             frequencies[:,t] = self.topics_frequency(dates[t])
         return frequencies
+
+    #stacked view
+    def topics_cumulative_frequencies(self,dates):
+        freq_cumul = np.zeros((self.number_topics,len(dates)))
+        freq_cumul[:,0] = self.topics_frequency(dates[0])
+        for t in range(1,len(dates)):
+            freq_cumul[:,t] = self.topics_frequency(dates[t])+ freq_cumul[:,t-1]
+        return freq_cumul
+
+
             
         
         

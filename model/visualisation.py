@@ -13,7 +13,7 @@ class Views(object):
         self.colors = colors[:self.model.number_topics]
         
     def scaled_topics(self):
-        fig = go.Figure(data=[go.Scatter(
+        scaled = go.Figure(data=[go.Scatter(
             x=self.model.topic_2d_coordinates()[:,0], 
             y=self.model.topic_2d_coordinates()[:,1],
             hovertemplate= "Topic %{text}: <br> %{customdata} </br><extra></extra>",
@@ -28,76 +28,173 @@ class Views(object):
             text=[str(i) for i in range(self.model.number_topics)]
             )],
             layout=go.Layout(clickmode='event+select'))
-        fig.update_layout(
+        scaled.update_layout(
             plot_bgcolor='white',
             autosize=False,
             width=1000,
-            height=600
+            height=600,
+            xaxis=dict(
+                visible=False
+            ),
+            yaxis=dict(
+                visible=False
+            )
+
         )
-        return fig
+        return scaled
         
         
     def frequency_topic_evolution(self,topic_id):
         fig = go.Figure(data=[go.Bar(x=self.model.corpus.years,
                                      y=self.model.topic_frequency_per_dates(topic_id))])
         return fig
-
+    
     def racing_bar_graph(self):
-        fig = go.Figure(
-            data=[
-                go.Bar(
-                    x=self.model.topics_frequency_per_dates(self.model.corpus.years)[:,0],
-                    y=np.linspace(0, self.model.number_topics-1,self.model.number_topics),
-                    orientation='h',
-                    text=self.model.topics_frequency_per_dates(self.model.corpus.years)[:,0],
-                    texttemplate='%{text:.3s}',
-                    textfont={'size':18},
-                    textposition='inside',
-                    insidetextanchor='middle',
-                    width=0.9,
-                    marker={'color':colors})
+        # make figure
+        fig_dict = {
+            "data": [],
+            "layout": {},
+            "frames": []
+        }
+        # fill in most of layout
+        fig_dict['layout']['xaxis']= {"range":[0,100],
+                                    "autorange":False,
+                                    "title":'percentage in the corpus',
+                                    'tickfont':dict(size=14)}
+        fig_dict["layout"]["yaxis"] = {"range":[-0.5,self.model.number_topics+0.5],
+                                    "autorange":False,
+                                    "tickprefix":'Topic ',
+                                    'tickfont':dict(size=14)}
+        fig_dict["layout"]["hovermode"] = "closest"
+        fig_dict["layout"]["yaxis_type"] = 'category'
+        fig_dict["layout"]["title"] = {
+            'text':"topics' frequencies ",
+            'font':dict(size=28),
+            'x':0.5,
+            'xanchor':'center'
+        }
+        fig_dict["layout"]['plot_bgcolor']='white'
+        fig_dict["layout"]["updatemenus"] = [
+            {"buttons": [
+                {"label": "Play",
+                "method": "animate",             
+                "args": [None, {"frame": {"duration": 500, "redraw": False},
+                                "fromcurrent": True, "transition": {"duration": 300,
+                                                                    "easing": "linear"}}]},
+                {"label": "Pause",
+                "method": "animate",
+                "args": [[None], {"frame": {"duration": 0, "redraw": False},
+                                "mode": "immediate","transition": {"duration": 0}}]}
             ],
-            layout=go.Layout(
-                xaxis=dict(range=[0,100],autorange=False,title='percentage in the corpus',tickfont=dict(size=14)),
-                yaxis=dict(range=[-0.5,self.model.number_topics+0.5],
-                autorange=False,
-                tickfont=dict(size=14),
-                tickprefix='Topic '),
-                yaxis_type = 'category',
+            "direction": "left",
+            "pad": {"r": 10, "t": 87},
+            "showactive": False,
+            "type": "buttons",
+            "x": 0.1,
+            "xanchor": "right",
+            "y": 0,
+            "yanchor": "top"}]
+        
+        sliders_dict = {
+            "active": 0,
+            "yanchor": "top",
+            "xanchor": "left",
+            "currentvalue": {
+                "font": {"size": 20},
+                "prefix": "Year:",
+                "visible": True,
+                "xanchor": "right"},
+            "transition": {"duration": 300, "easing": "cubic-in-out"},
+            "pad": {"b": 10, "t": 50},
+            "len": 0.9,
+            "x": 0.1,
+            "y": 0,
+            "steps": []
+        }
+        
+        #make data
+        year= self.model.corpus.years[0]
+        fig_dict['data'] = [{
+            'type':'bar',
+            'x': self.model.topics_frequency_per_dates(self.model.corpus.years)[:,0],
+            'y': np.linspace(0, self.model.number_topics-1,self.model.number_topics),
+            'orientation' : 'h',
+            'text' : self.model.topics_frequency_per_dates(self.model.corpus.years)[:,0],
+            'texttemplate' : '%{text:.3s}',
+            'textfont' : {'size':18},
+            'textposition' : 'inside',
+            'insidetextanchor' : 'middle',
+            'width' : 0.9,
+            'marker' : {'color':colors}        
+        }]
+        
+        #make frames
+        for year in range(len(self.model.corpus.years)):
+            frame = {"data": [], "name": str(year)}
+            frame["data"] = [{
+                'type':'bar',
+                'x': self.model.topics_frequency_per_dates(self.model.corpus.years)[:,year],
+                'y': np.linspace(0, self.model.number_topics-1,self.model.number_topics),
+                'orientation' : 'h',
+                'text' : self.model.topics_frequency_per_dates(self.model.corpus.years)[:,year],
+                'texttemplate' : '%{text:.3s}',
+                'textfont' : {'size':18},
+                'textposition' : 'inside',
+                'insidetextanchor' : 'middle',
+                'width' : 0.9,
+                'marker' : {'color':colors}        
+            }]
+            fig_dict["frames"].append(frame)
+            slider_step = {"args": [[year],
+                                    {"frame": {"duration": 300, "redraw": False},
+                                    "mode": "immediate",
+                                    "transition": {"duration": 300}}],
+                        "label": str(self.model.corpus.years[year]),
+                        "method": "animate"}
+            sliders_dict["steps"].append(slider_step)
+            
+        fig_dict["layout"]["sliders"] = [sliders_dict]
+        return go.Figure(fig_dict)
 
-                title=dict(text="topics' frequencies : "+ str(self.model.corpus.years[0]),font=dict(size=28),x=0.5,xanchor='center'),
-                plot_bgcolor='white',
-                updatemenus=[dict(
-                    type='buttons',
-                    buttons=[dict(
-                        label='Play',
-                        method='animate',
-                        args=[None,
-                        {"date":{'duration':5000,'redraw':True},
-                        'transition':{'duration':250,'easing':'linear'}}]
-                    )]
-                )]
+        
+
+    def streamgraph(self):
+        freq_matrix = self.model.topics_cumulative_frequencies(self.model.corpus.years)
+        x=self.model.corpus.years
+        streamgraph = go.Figure()
+        streamgraph.add_trace(go.Scatter(
+            x=x,
+            y=freq_matrix[0,:],
+            name="Topic 0",
+            mode='lines',
+            line=dict(width=0.5, color=colors[0]),
+            stackgroup ='one',
+            groupnorm='percent'
+        ))
+        for id in range(1,self.model.number_topics):
+            streamgraph.add_trace(go.Scatter(
+                x=x,
+                y=freq_matrix[id,:],
+                name="Topic " + str(id),
+                mode='lines',
+                line=dict(width=0.5, color=colors[id]),
+                stackgroup ='one'
+            ))
+        streamgraph.update_layout(
+            showlegend=True,
+            legend=dict(
+                orientation='h',
+                yanchor='bottom',
+                xanchor='right',
+                y=1.02,
+                x=1
             ),
-            frames=[
-                go.Frame(
-                    data=[
-                        go.Bar(x=self.model.topics_frequency_per_dates(self.model.corpus.years)[:,value],
-                        y=np.linspace(0, self.model.number_topics-1,self.model.number_topics),
-                        orientation='h',
-                        text=self.model.topics_frequency_per_dates(self.model.corpus.years)[:,value],
-                        marker={'color':colors})
-                    ],
-                    layout=go.Layout(
-                        xaxis=dict(range=[0,100],autorange=False,title='percentage in the corpus',tickfont=dict(size=14)),
-                        yaxis=dict(range=[-0.5,self.model.number_topics+0.5],autorange=False,tickfont=dict(size=14)),
-                        title=dict(text="topics' frequencies : "+ str(self.model.corpus.years[value]),font=dict(size=28),x=0.5,xanchor='center'))
-                )
-                for value in range(len(self.model.corpus.years))
-            ]
-        )
-        fig.update_layout(
-            autosize=False,
-            width=800,
-            height=600
-        )
-        return fig
+            hovermode='x unified',         
+            xaxis_type='category',
+            yaxis=dict(
+                type='linear',
+                range=[0,100],
+                ticksuffix='%'))
+
+        return streamgraph
+            

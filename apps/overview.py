@@ -28,19 +28,14 @@ layout = html.Div(children=[
                 id='racing-bar-graph',
                 figure=view.racing_bar_graph())
         ],className="six columns"),
-    ], className="row")   
+    ], className="row"),
+    html.Div([
+        html.H3('Stacked view'),
+        dcc.Graph(
+            id='streamgraph',
+            figure=view.streamgraph()) 
+    ])  
 ])
-
-@app.callback(
-    Output('link','href'),
-    [Input('figure','hoverData')])
-
-def display_hover_data(hoverData):
-    if hoverData:
-        target = hoverData['points'][0]['customdata']
-        return target
-    else :
-        raise PreventUpdate
 
 
 
