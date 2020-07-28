@@ -34,8 +34,14 @@ layout = html.Div(children=[
         dcc.Graph(
             id='streamgraph',
             figure=view.streamgraph()) 
-    ])  
+    ]),
+    dcc.Store(id='topic-id',storage_type="session")  
 ])
 
+@app.callback([Output('url','search'),Output('url', 'pathname')],[Input('scaled','clickData')])
 
+def update_pathname(clickData):
+    if clickData == None:
+        raise PreventUpdate
+    return str(clickData['points'][0]['pointNumber']),'/topic'
 

@@ -18,13 +18,17 @@ layout = html.Div(children=[
              html.Div([
                  dcc.Dropdown(
                      id='topic-id',
-                     options=[{'label':"Topic " + str(i),'value':i} for i in available_topics])]),
+                     options=[{'label':"Topic " + str(i),'value':i} for i in available_topics])
+                     
+             ]),
             dcc.Graph(
                 id='dates')
     
 ])
+@app.callback(Output('dates','figure'),[Input('topic-id','value'),Input('url','search')])
 
-@app.callback(Output('dates','figure'),[Input('topic-id','value')])
-
-def update_graph(topic_id):
-    return view.frequency_topic_evolution(topic_id)
+def update_graph(topic_id,topic_init):
+    if topic_id == None:
+        return view.frequency_topic_evolution(int(topic_init))
+    else:
+        return view.frequency_topic_evolution(topic_id)
