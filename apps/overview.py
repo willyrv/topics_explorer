@@ -1,5 +1,5 @@
 
-
+import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input,Output
@@ -8,37 +8,33 @@ from dash.exceptions import PreventUpdate
 from app import app,view
 
 layout = html.Div(children=[
-    dcc.Link(
-        html.Button("overview"),
-        href='/'),
-    dcc.Link(
-        html.Button("topic"),
-        href='/topic'),
-    html.H1(children='Topics Explorer'),
+    html.Button('Scaled', id='scaled-button', n_clicks=0),
+    html.Button('Racing Bar', id='racing-bar-button', n_clicks=0),
+    html.Button('Stacked', id='stacked-button', n_clicks=0),
     html.Div([
-        html.Div([
-            html.H3('Scaled view'),
-            dcc.Graph(
-                id='scaled',
-                figure=view.scaled_topics())
-        ],className="six columns"),
-        html.Div([
-            html.H3('Topics evolution over years'),
-            dcc.Graph(
-                id='racing-bar-graph',
-                figure=view.racing_bar_graph())
-        ],className="six columns"),
-    ], className="row"),
-    html.Div([
-        html.H3('Stacked view'),
-        dcc.Graph(
-            id='streamgraph',
-            figure=view.streamgraph()) 
-    ]),
-    dcc.Store(id='topic-id',storage_type="session")  
+        html.H3(id='title'),
+        dcc.Graph(id='graph')
+    ])
 ])
 
-@app.callback([Output('url','search'),Output('url', 'pathname')],[Input('scaled','clickData')])
+@app.callback([Output('graph', 'figure'),Output('title','children')],
+              [Input('scaled-button', 'n_clicks'),
+               Input('racing-bar-button', 'n_clicks'),
+               Input('stacked-button', 'n_clicks')])
+def update_view(btn1, btn2, btn3):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    if 'racing-bar-button' in changed_id:
+        fig = view.racing_bar_graph()
+        title = 'Racing Bar view'
+    elif 'stacked-button' in changed_id:
+        fig = view.streamgraph()
+        title = 'Stacked view'
+    else:
+        fig = view.scaled_topics()
+        title = 'Scaled view'
+    return fig,title
+
+@app.callback([Output('url','search'),Output('url', 'pathname')],[Input('graph','clickData')])
 
 def update_pathname(clickData):
     if clickData == None:

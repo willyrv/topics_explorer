@@ -1,6 +1,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input,Output
+from dash.exceptions import PreventUpdate
 
 from app import app,view,available_topics
 
@@ -15,20 +16,15 @@ layout = html.Div(children=[
     html.Div(children='''
              Choose a topic
              '''),
-             html.Div([
-                 dcc.Dropdown(
-                     id='topic-id',
-                     options=[{'label':"Topic " + str(i),'value':i} for i in available_topics])
-                     
-             ]),
             dcc.Graph(
                 id='dates')
     
 ])
-@app.callback(Output('dates','figure'),[Input('topic-id','value'),Input('url','search')])
+@app.callback(Output('dates','figure'),[Input('url','search')])
 
-def update_graph(topic_id,topic_init):
+def update_graph(topic_id):
     if topic_id == None:
-        return view.frequency_topic_evolution(int(topic_init))
+        raise PreventUpdate
     else:
-        return view.frequency_topic_evolution(topic_id)
+        return view.frequency_topic_evolution(int(topic_id))
+ 

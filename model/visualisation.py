@@ -27,19 +27,14 @@ class Views(object):
                 showscale=False),
             text=[str(i) for i in range(self.model.number_topics)]
             )],
-            layout=go.Layout(clickmode='event+select'))
-        scaled.update_layout(
-            plot_bgcolor='white',
-            autosize=False,
-            width=1000,
-            height=600,
-            xaxis=dict(
-                visible=False
-            ),
-            yaxis=dict(
-                visible=False
+            layout=go.Layout(
+                plot_bgcolor='white',
+                autosize=False,
+                width=1000,
+                height=600,
+                xaxis=dict(visible=False),
+                yaxis=dict(visible=False)
             )
-
         )
         return scaled
         
@@ -189,7 +184,9 @@ class Views(object):
                 y=1.02,
                 x=1
             ),
-            hovermode='x unified',         
+            legend_itemclick = False,
+            hovermode='x unified',   
+            clickmode='none',   
             xaxis_type='category',
             yaxis=dict(
                 type='linear',
