@@ -21,6 +21,7 @@ layout = html.Div(children=[
               [Input('scaled-button', 'n_clicks'),
                Input('racing-bar-button', 'n_clicks'),
                Input('stacked-button', 'n_clicks')])
+
 def update_view(btn1, btn2, btn3):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'racing-bar-button' in changed_id:
@@ -34,10 +35,11 @@ def update_view(btn1, btn2, btn3):
         title = 'Scaled view'
     return fig,title
 
-@app.callback([Output('url','search'),Output('url', 'pathname')],[Input('graph','clickData')])
+@app.callback([Output('store-nb','data'),Output('store-path', 'data')],[Input('graph','clickData')])
 
-def update_pathname(clickData):
+def store_pathname_on_click(clickData):
     if clickData == None:
         raise PreventUpdate
-    return str(clickData['points'][0]['pointNumber']),'/topic'
+    else:
+        return str(clickData['points'][0]['pointNumber']),'/topic'
 

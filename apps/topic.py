@@ -6,25 +6,18 @@ from dash.exceptions import PreventUpdate
 from app import app,view,available_topics
 
 layout = html.Div(children=[
-    dcc.Link(
-        html.Button("overview"),
-        href='/'),
-     dcc.Link(
-        html.Button("topic"),
-        href='/topic'),
-    html.H3('Evolution of topic frequency'),
-    html.Div(children='''
-             Choose a topic
-             '''),
-            dcc.Graph(
-                id='dates')
+    html.H3(id='nb_topic'),
+    html.Div(
+            dcc.Graph(id='dates'))
     
 ])
-@app.callback(Output('dates','figure'),[Input('url','search')])
 
-def update_graph(topic_id):
-    if topic_id == None:
+@app.callback([Output('nb_topic','children'),Output('dates','figure')],[Input('url','search')])
+
+def update_nb_topic(topic_id):
+    if topic_id == None or topic_id == '':
         raise PreventUpdate
     else:
-        return view.frequency_topic_evolution(int(topic_id))
+        title="Topic " + topic_id
+        return title,view.frequency_topic_evolution(int(topic_id))
  

@@ -9,13 +9,14 @@ def Navbar():
     navbar = dbc.NavbarSimple(
         children=[
             dbc.NavItem(dbc.NavLink("Overview",href="/")),
+            dbc.NavItem(dbc.NavLink("Dictionary",href='/dictionary')),
             dbc.DropdownMenu(
                 nav=True,
                 in_navbar=True,
                 id='topic-id',
                 label="Topic",
                 children=[
-                    dbc.DropdownMenuItem(children="Topic "+ str(id),href='/topic') for id in range(view.model.number_topics)
+                    dbc.DropdownMenuItem(children="Topic "+ str(id),href='/topic',id=str(id)) for id in range(view.model.number_topics)
                 ]
              
             )
@@ -26,3 +27,4 @@ def Navbar():
         dark=True
     )
     return navbar
+
