@@ -4,7 +4,7 @@
 import numpy as np
 import plotly.graph_objects as go
 
-colors = ['#FF0000','#FFFF00','#FF00FF','#00FFFF','#800000','#008000','#808000','#800080','#008080','#C0C0C0','#808080','#9999FF','#993366','#FFFFCC','#CCFFFF','#660066','#FF8080','#0066CC','#CCCCFF','#000080','#00CCFF','#CCFFCC','#FFFF99','#FF99CC','#FFCC00','#FF9900','#FF6600','#666699','#969696','#003366','#333333','#339966','#003300','#333300','#993300','#333399','#0000FF','#99CCFF','#CC99FF','#FFCC99','#3366FF','#33CCCC','#99CC00','#00FF00']
+colors = ['#FF0000','#FFFF00','#FF00FF','#00FFFF','#800000','#008000','#808000','#800080','#008080','#C0C0C0','#808080','#9999FF','#993366','#FF8080','#0066CC','#CCCCFF','#000080','#00CCFF','#CCFFCC','#FFFF99','#FF99CC','#FFCC00','#FF9900','#FF6600','#666699','#969696','#003366','#333333','#339966','#003300','#333300','#993300','#333399','#0000FF','#99CCFF','#CC99FF','#FFCC99','#3366FF','#33CCCC','#99CC00','#00FF00']
 
 class Views(object):
     def __init__(self,topic_model):
@@ -22,7 +22,7 @@ class Views(object):
             marker=dict (
                 size=self.model.topics_frequency(),
                 sizemode='area',
-                sizeref=2.*max(self.model.topics_frequency())/(90.**2),
+                sizeref=2.*max(self.model.topics_frequency())/(120.**2),
                 color=colors,
                 showscale=False),
             text=[str(i) for i in range(self.model.number_topics)]
@@ -30,8 +30,8 @@ class Views(object):
             layout=go.Layout(
                 plot_bgcolor='white',
                 autosize=False,
-                width=1000,
-                height=600,
+                width=1500,
+                height=700,
                 xaxis=dict(visible=False),
                 yaxis=dict(visible=False)
             )
@@ -62,6 +62,9 @@ class Views(object):
                                     'tickfont':dict(size=14)}
         fig_dict["layout"]["hovermode"] = "closest"
         fig_dict["layout"]["yaxis_type"] = 'category'
+        fig_dict['layout']['autosize'] = False
+        fig_dict["layout"]["width"] = 1500
+        fig_dict["layout"]["height"] = 700
         fig_dict["layout"]["title"] = {
             'text':"topics' frequencies ",
             'font':dict(size=28),
@@ -184,6 +187,8 @@ class Views(object):
                 y=1.02,
                 x=1
             ),
+            width = 1500,
+            height = 700,
             legend_itemclick = False,
             hovermode='x unified',   
             clickmode='none',   

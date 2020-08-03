@@ -1,5 +1,6 @@
 
 import dash
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input,Output
@@ -8,13 +9,24 @@ from dash.exceptions import PreventUpdate
 from app import app,view
 
 layout = html.Div(children=[
-    html.Button('Scaled', id='scaled-button', n_clicks=0),
-    html.Button('Racing Bar', id='racing-bar-button', n_clicks=0),
-    html.Button('Stacked', id='stacked-button', n_clicks=0),
-    html.Div([
-        html.H3(id='title'),
-        dcc.Graph(id='graph')
-    ])
+    dbc.ButtonGroup([
+        dbc.Button('Scaled', id='scaled-button', n_clicks=0),
+        dbc.Button('Racing Bar', id='racing-bar-button', n_clicks=0),
+        dbc.Button('Stacked', id='stacked-button', n_clicks=0)
+    ],
+    size = 'lg'
+    ),
+    dbc.Row(
+        dbc.Col(
+            html.Div([
+                html.Br(),
+                html.H3(id='title'),
+                dcc.Graph(id='graph')
+            ]),
+            width={"size": 8, "offset": 1}
+        )
+    )
+    
 ])
 
 @app.callback([Output('graph', 'figure'),Output('title','children')],
