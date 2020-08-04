@@ -38,6 +38,8 @@ layout = html.Div(children=[
 
 def update_view(btn1, btn2, btn3):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    display_alert = {'display':'none'}
+    display_graph = {'display':'block'}
     if 'racing-bar-button' in changed_id:
         if view.model.corpus.dates==False:
             display_alert = {'display':'block'}
@@ -55,8 +57,6 @@ def update_view(btn1, btn2, btn3):
             fig = view.streamgraph()
         title = 'Stacked view'
     else:
-        display_alert = {'display':'none'}
-        display_graph = {'display':'block'}
         fig = view.scaled_topics()
         title = 'Scaled view'
     return display_alert,display_graph,fig,title
