@@ -72,7 +72,9 @@ class TopicModel(object):
 
     def topics_frequency(self,date=None):#pourcentages
         if date==None:
-            matrix = self.document_topic_matrix            
+            matrix = self.document_topic_matrix    
+        elif self.corpus.dates==False:
+            raise Exception('dates are missing')        
         else:
             rows = self.corpus.data[self.corpus.data['date']==date].index
             matrix = self.document_topic_matrix[rows,:]
@@ -82,10 +84,14 @@ class TopicModel(object):
     def topic_frequency_per_dates(self, topic_id,date=None):
         if date==None:
             return self.topics_frequency_per_dates(self.corpus.years)[topic_id,:]
+        elif self.corpus.dates==False:
+            raise Exception('dates are missing')
         else:
             return self.topics_frequency_per_dates(self.corpus.years)[topic_id,date]
 
     def topics_frequency_per_dates(self, dates):
+        if self.corpus.dates==False:
+            raise Exception('dates are missing')
         frequencies = np.zeros((self.number_topics,len(dates)))
         for t in range(len(dates)):
             frequencies[:,t] = self.topics_frequency(dates[t])
@@ -93,6 +99,8 @@ class TopicModel(object):
 
     #stacked view
     def topics_cumulative_frequencies(self,dates):
+        if self.corpus.dates==False:
+            raise Exception('dates are missing')
         freq_cumul = np.zeros((self.number_topics,len(dates)))
         freq_cumul[:,0] = self.topics_frequency(dates[0])
         for t in range(1,len(dates)):

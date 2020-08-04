@@ -40,11 +40,15 @@ class Views(object):
         
         
     def frequency_topic_evolution(self,topic_id):
+        if self.model.corpus.dates==False:
+            raise Exception('dates are missing')
         fig = go.Figure(data=[go.Bar(x=self.model.corpus.years,
                                      y=self.model.topic_frequency_per_dates(topic_id))])
         return fig
     
     def racing_bar_graph(self):
+        if self.model.corpus.dates==False:
+            raise Exception('dates are missing')
         # make figure
         fig_dict = {
             "data": [],
@@ -157,6 +161,8 @@ class Views(object):
         
 
     def streamgraph(self):
+        if self.model.corpus.dates==False:
+            raise Exception('dates are missing')
         freq_matrix = self.model.topics_cumulative_frequencies(self.model.corpus.years)
         x=self.model.corpus.years
         streamgraph = go.Figure()

@@ -5,7 +5,7 @@ import dash
 import dash_bootstrap_components as dbc
 import pickle
 
-f = open('ASRS1000docs15topics.pickle','rb')
+f = open('ASRStestdate.pickle','rb')
 view = pickle.load(f)
 
 available_topics = list(range(view.model.number_topics))

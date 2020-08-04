@@ -9,9 +9,9 @@ ASRS = './input/ASRS_1000docs.csv'
 
 nb_topics = 15
 
-model = TopicModel(Corpus(source_file_path=ASRS),nb_topics)
+model = TopicModel(Corpus(source_file_path=ASRS,dates=False),nb_topics)
 view = Views(model)
 
-f = open('ASRS1000docs15topics.pickle','wb')
+f = open('ASRStestdate.pickle','wb')
 pickle.dump(view,f)
 f.close()

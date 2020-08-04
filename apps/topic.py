@@ -22,12 +22,13 @@ layout = html.Div(children=[
             ]),
             width={"size": 3, "offset": 1}
         ),
-        dbc.Col(dcc.Graph(id='frequency-per-years'))
+        dbc.Col(html.Div(id='graph-frequency-container',children=[dcc.Graph(id='frequency-per-years')]))
     ])
 ])
 
 outputs = [Output('word'+str(w),'children') for w in range(nb_words)]
 outputs.insert(0,Output('title-topic','children'))
+outputs.append(Output('graph-frequency-container','style'))
 outputs.append(Output('frequency-per-years','figure'))
 
 @app.callback(outputs,[Input('url','search')])
@@ -38,6 +39,11 @@ def update_topic_page(topic_id):
     else:
         title = 'Topic ' + topic_id
         list_words = [view.model.top_words_topic(int(topic_id),nb_words)[w][0] for w in range(nb_words)]
-        fig = view.frequency_topic_evolution(int(topic_id))     
+        if view.model.corpus.dates==False:
+            display= {'display':'none'}
+            fig = view.scaled_topics()
+        else:
+            display = {'display':'block'}
+            fig = view.frequency_topic_evolution(int(topic_id))     
 
-    return title,*list_words, fig
+    return title,*list_words, display,fig

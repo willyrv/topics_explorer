@@ -21,7 +21,9 @@ layout = html.Div(children=[
             html.Div([
                 html.Br(),
                 html.H3(id='title'),
-                dcc.Graph(id='graph')
+                html.Div(id='alert-overview',style={'display':'none'},children=[dbc.Alert('This view are not available because data is missing.',color='info')]),
+                html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph')])
+                
             ]),
             width={"size": 8, "offset": 1}
         )
@@ -29,7 +31,7 @@ layout = html.Div(children=[
     
 ])
 
-@app.callback([Output('graph', 'figure'),Output('title','children')],
+@app.callback([Output('alert-overview','style'),Output('graph-overview-container','style'),Output('graph', 'figure'),Output('title','children')],
               [Input('scaled-button', 'n_clicks'),
                Input('racing-bar-button', 'n_clicks'),
                Input('stacked-button', 'n_clicks')])
@@ -37,15 +39,27 @@ layout = html.Div(children=[
 def update_view(btn1, btn2, btn3):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'racing-bar-button' in changed_id:
-        fig = view.racing_bar_graph()
+        if view.model.corpus.dates==False:
+            display_alert = {'display':'block'}
+            display_graph = {'display':'none'}
+            fig= view.scaled_topics()
+        else:
+            fig = view.racing_bar_graph()
         title = 'Racing Bar view'
     elif 'stacked-button' in changed_id:
-        fig = view.streamgraph()
+        if view.model.corpus.dates==False:
+            display_alert = {'display':'block'}
+            display_graph = {'display':'none'}
+            fig = view.scaled_topics()
+        else:
+            fig = view.streamgraph()
         title = 'Stacked view'
     else:
+        display_alert = {'display':'none'}
+        display_graph = {'display':'block'}
         fig = view.scaled_topics()
         title = 'Scaled view'
-    return fig,title
+    return display_alert,display_graph,fig,title
 
 @app.callback([Output('store-nb','data'),Output('store-path', 'data')],[Input('graph','clickData')])
 
