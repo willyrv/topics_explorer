@@ -38,12 +38,15 @@ def update_topic_page(topic_id):
         raise PreventUpdate
     else:
         title = 'Topic ' + topic_id
-        list_words = [view.model.top_words_topic(int(topic_id),nb_words)[w][0] for w in range(nb_words)]
+        list_arg = [view.model.top_words_topic(int(topic_id),nb_words)[w][0] for w in range(nb_words)]
         if view.model.corpus.dates==False:
             display= {'display':'none'}
             fig = view.scaled_topics()
         else:
             display = {'display':'block'}
             fig = view.frequency_topic_evolution(int(topic_id))     
+        list_arg.insert(0,title)
+        list_arg.append(display)
+        list_arg.append(fig)
 
-    return title,*list_words, display,fig
+    return tuple(list_arg)
