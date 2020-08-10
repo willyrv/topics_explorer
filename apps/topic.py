@@ -1,3 +1,4 @@
+import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
@@ -22,16 +23,24 @@ layout = html.Div(children=[
             ]),
             width={"size": 3, "offset": 1}
         ),
-        dbc.Col(html.Div(id='graph-frequency-container',children=[dcc.Graph(id='frequency-per-years')]))
+        dbc.Col([
+            html.H5('Topic frequency evolution'),
+            html.Div(id='graph-frequency-container',children=[dcc.Graph(id='frequency-per-years')]),
+            html.H5('Related documents'),
+            html.Ul(id='doc-container'),
+        ])
     ])
 ])
 
-outputs = [Output('word'+str(w),'children') for w in range(nb_words)]
-outputs.insert(0,Output('title-topic','children'))
-outputs.append(Output('graph-frequency-container','style'))
-outputs.append(Output('frequency-per-years','figure'))
+outputs_topic = [Output('word'+str(w),'children') for w in range(nb_words)]
+outputs_topic.insert(0,Output('title-topic','children'))
+outputs_topic.append(Output('graph-frequency-container','style'))
+outputs_topic.append(Output('frequency-per-years','figure'))
+outputs_topic.append(Output('doc-container','children'))
 
-@app.callback(outputs,[Input('url','search')])
+
+
+@app.callback(outputs_topic,[Input('url','search')])
 
 def update_topic_page(topic_id):
     if topic_id == None or topic_id == '':
@@ -44,9 +53,20 @@ def update_topic_page(topic_id):
             fig = view.scaled_topics()
         else:
             display = {'display':'block'}
-            fig = view.frequency_topic_evolution(int(topic_id))     
+            fig = view.frequency_topic_evolution(int(topic_id))
         list_arg.insert(0,title)
         list_arg.append(display)
         list_arg.append(fig)
+        list_arg.append([html.Li(view.model.corpus.title(doc)+', '+str(view.model.corpus.date(doc))) for doc in view.model.documents_for_topic(int(topic_id))])
 
     return tuple(list_arg)
+
+inputs_topic = [Input('word'+str(w),'n_clicks') for w in range(nb_words)]
+
+@app.callback([Output('store-id-topic','data'),Output('store-path-topic','data')],inputs_topic)
+def click_on_words(*args):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    if changed_id == None :
+        raise PreventUpdate
+    else :
+        return changed_id[4],'/word'

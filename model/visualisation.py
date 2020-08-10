@@ -205,4 +205,27 @@ class Views(object):
                 ticksuffix='%'))
 
         return streamgraph
+
+    def table(self):
+        table = go.Figure(data=[go.Table(
+            columnorder= [1,2,3,4],
+            columnwidth=[100,1000,200,200],
+            header= dict(values=['Topics','top words','documents count','proportion'],height=60),
+            cells= dict(values=[
+                [id for id in range(self.model.number_topics)],
+                [self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)],
+                [len(self.model.documents_for_topic(id)) for id in range(self.model.number_topics)],
+                self.model.topics_frequency()
+            ],
+            height=40
+            )
+        )],
+        layout=go.Layout(
+                plot_bgcolor='white',
+                autosize=False,
+                width=1500,
+                height=900
+            )
+        )
+        return table
             

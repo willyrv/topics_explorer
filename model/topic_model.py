@@ -33,9 +33,7 @@ class TopicModel(object):
 
     def display_top_words_1topic(self,topic_id,nb_words):
         top_words = [self.top_words_topic(topic_id,nb_words)[i][0] for i in range(nb_words)]
-        return ', '.join(top_words)
-        
-
+        return ', '.join(top_words)     
         
     #méthodes doc topic
     def topic_distribution_for_doc(self,doc_id):
