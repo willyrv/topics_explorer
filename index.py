@@ -28,21 +28,18 @@ app.layout = dbc.Container(
 inputs_index = [Input(str(id),'n_clicks') for id in range(view.model.number_topics)]
 inputs_index.insert(0,Input('store-id-overview','data'))
 inputs_index.insert(1,Input('store-path-overview','data'))
-inputs_index.insert(2,Input('store-id-topic','data'))
-inputs_index.insert(3,Input('store-path-topic','data'))
+inputs_index.insert(2,Input('store-path-topic','data'))
 
 @app.callback([Output('url','search'),Output('url','pathname')],inputs_index)
 
-def update_pathname(store_id_overview,store_path_overview,store_id_topic,store_path_topic,*args):
+def update_pathname(store_id_overview,store_path_overview,store_path_topic,*args):
     ctx = dash.callback_context
     if (not ctx.triggered or ctx.triggered[0]['prop_id'].split('.')[0]=='store-id-overview' or ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-overview') and store_id_overview==None :
         raise PreventUpdate
-    elif (not ctx.triggered or ctx.triggered[0]['prop_id'].split('.')[0]=='store-id-topic' or ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-topic') and store_id_topic==None :
-        raise PreventUpdate
     elif  ctx.triggered[0]['prop_id'].split('.')[0]=='store-id-overview' or ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-overview':
         return store_id_overview, store_path_overview
-    elif  ctx.triggered[0]['prop_id'].split('.')[0]=='store-id-topic' or ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-topic':
-        return store_id_topic, store_path_topic
+    elif  ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-topic':
+        return '', store_path_topic
     else:
         button_id = ctx.triggered[0]['prop_id'].split('.')[0]
         return str(button_id),'/topic'

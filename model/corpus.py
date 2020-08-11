@@ -31,6 +31,9 @@ class Corpus(object):
     def word_for_id(self, word_id):
         return self.index_words.get(word_id)
 
+    def id_for_word(self,word):
+        return next((str(id) for id, w in self.index_words.items() if w == word), None)
+
     def date(self, doc_id):
         if self.dates == False:
             raise Exception('dates are missing')
