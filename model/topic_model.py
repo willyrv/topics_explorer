@@ -5,6 +5,8 @@ from sklearn.decomposition import LatentDirichletAllocation as LDA
 import numpy as np
 from operator import itemgetter
 from sklearn.manifold import MDS
+from sklearn.decomposition import PCA
+
 
 class TopicModel(object):
     def __init__(self,corpus,number_topics):
@@ -64,13 +66,15 @@ class TopicModel(object):
         return matrix
     
     def topic_2d_coordinates(self):
-        embedding = MDS(n_components=2,dissimilarity='precomputed')
+        embedding = MDS(n_components=2,dissimilarity='precomputed',random_state=0)
         topic_coordinates = embedding.fit_transform(self.distance_topics())
+        #pca = PCA(n_components=2)
+        #topic_coordinates = pca.fit_transform(self.distance_topics())
         return topic_coordinates
 
     def topics_frequency(self,date=None):#pourcentages
         if date==None:
-            matrix = self.document_topic_matrix    
+            matrix = self.document_topic_matrix 
         elif self.corpus.dates==False:
             raise Exception('dates are missing')        
         else:
@@ -85,7 +89,7 @@ class TopicModel(object):
         elif self.corpus.dates==False:
             raise Exception('dates are missing')
         else:
-            return self.topics_frequency_per_dates(self.corpus.years)[topic_id,date]
+            return np.around(self.topics_frequency_per_dates(self.corpus.years)[topic_id,date],decimals=2)
 
     def topics_frequency_per_dates(self, dates):
         if self.corpus.dates==False:
@@ -93,7 +97,7 @@ class TopicModel(object):
         frequencies = np.zeros((self.number_topics,len(dates)))
         for t in range(len(dates)):
             frequencies[:,t] = self.topics_frequency(dates[t])
-        return frequencies
+        return np.around(frequencies,decimals=2)
 
     #stacked view
     def topics_cumulative_frequencies(self,dates):
@@ -103,7 +107,7 @@ class TopicModel(object):
         freq_cumul[:,0] = self.topics_frequency(dates[0])
         for t in range(1,len(dates)):
             freq_cumul[:,t] = self.topics_frequency(dates[t])+ freq_cumul[:,t-1]
-        return freq_cumul
+        return np.around(freq_cumul,decimals=2)
 
 
             

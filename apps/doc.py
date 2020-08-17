@@ -11,7 +11,7 @@ layout = html.Div([
     html.H3(id='doc-id')
 ])
 
-@app.callback(Output('doc-id','children'),[Input('url','search')])
+@app.callback(Output('doc-id','children'),[Input('url','hash')])
 
 def update_doc(doc_id):
     return 'Document ' + doc_id

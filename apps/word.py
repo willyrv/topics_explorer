@@ -8,10 +8,16 @@ from dash.exceptions import PreventUpdate
 from app import app,view
 
 layout = html.Div([
-    dbc.Select(
-        id = 'word-selection',
-        options = [{'label': id,'value' : w} for w,id in view.model.corpus.index_words.items()]
-    ),
+    html.Br(),
+    dbc.Row(dbc.Col(html.Div(['Click to select a word']),width={"size": 3, "offset": 1})),
+    html.Br(),
+    dbc.Row(dbc.Col(
+        dbc.Select(
+            id = 'word-selection',
+            options = [{'label': id,'value' : w} for w,id in view.model.corpus.index_words.items()]
+        ),
+        width={"size": 3, "offset": 1}
+    )),
     html.H3(id='word-id')
 
 ])
@@ -19,7 +25,7 @@ layout = html.Div([
 @app.callback(Output('word-selection','value'),[Input('store-id-topic','data')])
 
 def initialisation_word(word_id):
-    if word_id == '':
+    if word_id == '' or word_id == None:
         raise PreventUpdate
     else :
         return word_id

@@ -32,8 +32,8 @@ class Views(object):
                 autosize=False,
                 width=1500,
                 height=700,
-                xaxis=dict(visible=False),
-                yaxis=dict(visible=False)
+                #xaxis=dict(visible=False),
+                #yaxis=dict(visible=False)
             )
         )
         return scaled
@@ -42,8 +42,16 @@ class Views(object):
     def frequency_topic_evolution(self,topic_id):
         if self.model.corpus.dates==False:
             raise Exception('dates are missing')
-        fig = go.Figure(data=[go.Bar(x=self.model.corpus.years,
-                                     y=self.model.topic_frequency_per_dates(topic_id))])
+        fig = go.Figure(
+            data=[go.Bar(
+                x=self.model.corpus.years,
+                y=self.model.topic_frequency_per_dates(topic_id),
+                hovertemplate= "Year %{x} : <br> %{y} </br><extra></extra>")],
+            layout= dict(
+                yaxis=dict(ticksuffix='%'),
+                plot_bgcolor = 'white')
+                
+            )
         return fig
     
     def racing_bar_graph(self):
@@ -127,7 +135,9 @@ class Views(object):
             'textposition' : 'inside',
             'insidetextanchor' : 'middle',
             'width' : 0.9,
-            'marker' : {'color':colors}        
+            'marker' : {'color':colors},
+            'hovertemplate' : "%{y}: <br> %{customdata} </br><extra></extra>",
+            'customdata' : [self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)]   
         }]
         
         #make frames
