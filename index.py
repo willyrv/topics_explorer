@@ -17,10 +17,12 @@ app.layout = dbc.Container(
     html.Div([
         nav,
         dcc.Location(id='url', refresh=False),
+        html.Br(),
         html.Div(id='page-content'),
         dcc.Store(id='store-id-overview',storage_type='session',clear_data=True),
         dcc.Store(id='store-path-overview',storage_type='session',clear_data=True),
-        dcc.Store(id='store-id-topic',storage_type='session',clear_data=True),
+        dcc.Store(id='store-id-topic-doc',storage_type='session',clear_data=True),
+        dcc.Store(id='store-id-topic-word',storage_type='session',clear_data=True),
         dcc.Store(id='store-path-topic',storage_type='session',clear_data=True)
     ]),
     fluid=True

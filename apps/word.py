@@ -8,7 +8,6 @@ from dash.exceptions import PreventUpdate
 from app import app,view
 
 layout = html.Div([
-    html.Br(),
     dbc.Row(dbc.Col(html.Div(['Click to select a word']),width={"size": 3, "offset": 1})),
     html.Br(),
     dbc.Row(dbc.Col(
@@ -22,7 +21,7 @@ layout = html.Div([
 
 ])
 
-@app.callback(Output('word-selection','value'),[Input('store-id-topic','data')])
+@app.callback(Output('word-selection','value'),[Input('store-id-topic-word','data')])
 
 def initialisation_word(word_id):
     if word_id == '' or word_id == None:

@@ -20,8 +20,7 @@ class Corpus(object):
         self.dates = dates
         if dates==True:
             self.years = sorted(self.data['date'].unique())
-        
-        
+           
     def full_text(self, doc_id):
         return self.data.iloc[doc_id]['text']
 

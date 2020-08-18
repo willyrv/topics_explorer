@@ -52,6 +52,10 @@ class TopicModel(object):
             if most_likely_topic == topic_id:
                 doc_ids.append(doc_id)
         return doc_ids
+
+    def max_number_docs(self):
+        list_nb_docs = [len(self.documents_for_topic(id)) for id in range(self.number_topics)]
+        return np.max(list_nb_docs)
         
    #méthodes scaled_view
     def distance_topics(self):
@@ -108,6 +112,27 @@ class TopicModel(object):
         for t in range(1,len(dates)):
             freq_cumul[:,t] = self.topics_frequency(dates[t])+ freq_cumul[:,t-1]
         return np.around(freq_cumul,decimals=2)
+
+    #related docs
+    def distance_docs(self):
+        matrix = np.zeros((self.corpus.size,self.corpus.size))
+        for i in range(self.corpus.size):
+            doc_i = self.topic_distribution_for_doc(i)
+            for j in range(i+1,self.corpus.size):
+                doc_j = self.topic_distribution_for_doc(j)
+                dist_ij = np.sum(np.abs(np.log(doc_i)-np.log(doc_j)))
+                matrix[i,j]=dist_ij
+                matrix[j,i]=dist_ij
+        return matrix
+    
+    def closest_docs(self,doc_id,nb_docs): 
+        weights = self.distance_docs()[:,int(doc_id)]
+        weights[int(doc_id)] = 1000
+        docs = np.argsort(weights)
+        return docs[:nb_docs]
+
+
+
 
 
             
