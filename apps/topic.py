@@ -76,17 +76,17 @@ def update_topic_page(topic_id):
 
     return tuple(list_arg)
 
-inputs_topic = [Input('word'+str(w),'n_clicks') for w in range(nb_words)] +[Input('doc'+str(d),'n_clicks') for d in range(nb_max_docs)] # à changer 
+inputs_topic = [Input('word'+str(w),'n_clicks') for w in range(nb_words)] +[Input('doc'+str(d),'n_clicks') for d in range(nb_max_docs)]
 inputs_topic.insert(0,Input('store-top-words','data'))
 inputs_topic.insert(1,Input('store-docs-topic','data'))
 
 @app.callback([Output('store-id-topic-word','data'),Output('store-id-topic-doc','data'),Output('store-path-topic','data')],inputs_topic)
 def click_on_words(list_words,list_docs,*args):
-    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]    
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if changed_id[0] == 'w':
         return view.model.corpus.id_for_word(list_words[int(changed_id[4:-9])]),'','/word'
     elif changed_id[0] == 'd'  and int(changed_id[3:-9])<len(list_docs):
-        return '',list_docs[int(changed_id[3:-9])],'/doc'
+        return '',str(list_docs[int(changed_id[3:-9])]),'/doc'
     else :
         raise PreventUpdate
 

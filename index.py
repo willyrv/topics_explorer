@@ -36,15 +36,15 @@ inputs_index.insert(2,Input('store-path-topic','data'))
 
 def update_pathname(store_id_overview,store_path_overview,store_path_topic,*args):
     ctx = dash.callback_context
-    if (not ctx.triggered or ctx.triggered[0]['prop_id'].split('.')[0]=='store-id-overview' or ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-overview') and store_id_overview==None :
+    c = ctx.triggered[0]['prop_id'].split('.')[0]
+    if (not ctx.triggered or c =='store-id-overview' or c =='store-path-overview') and store_id_overview==None :
         raise PreventUpdate
-    elif  ctx.triggered[0]['prop_id'].split('.')[0]=='store-id-overview' or ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-overview':
+    elif  c =='store-id-overview' or c =='store-path-overview':
         return store_id_overview, store_path_overview
-    elif  ctx.triggered[0]['prop_id'].split('.')[0]=='store-path-topic':
+    elif  c =='store-path-topic':
         return '', store_path_topic
     else:
-        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
-        return str(button_id),'/topic'
+        return str(c),'/topic'
 
 
 @app.callback(Output('page-content', 'children'),[Input('url', 'pathname')])
@@ -63,4 +63,4 @@ def display_page(pathname):
         return '404'
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
