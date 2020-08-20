@@ -3,9 +3,11 @@
 
 from sklearn.decomposition import LatentDirichletAllocation as LDA
 import numpy as np
+import scipy.sparse as sp
 from operator import itemgetter
 from sklearn.manifold import MDS
 from sklearn.decomposition import PCA
+from sklearn.feature_extraction.text import TfidfTransformer as TfIdf
 
 
 class TopicModel(object):
@@ -16,9 +18,11 @@ class TopicModel(object):
         
         lda = LDA(n_components=number_topics, learning_method='batch')
         lda.fit(self.corpus.vector_space_data)
+        tfidf = TfIdf()
         
         self.topic_word_matrix = np.array(lda.components_)
         self.document_topic_matrix = np.array(lda.transform(self.corpus.vector_space_data))
+        self.tfidf_matrix = tfidf.fit_transform(self.corpus.vector_space_data)
         
         
     #méthodes mot topic
@@ -130,6 +134,12 @@ class TopicModel(object):
         weights[int(doc_id)] = 1000
         docs = np.argsort(weights)
         return docs[:nb_docs]
+
+    #words
+    def nb_docs_for_word(self,word_id):
+        vector = self.tfidf_matrix.getcol(word_id)
+        nb_docs = vector.count_nonzero()
+        return nb_docs
 
 
 

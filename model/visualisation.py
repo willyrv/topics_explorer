@@ -219,22 +219,32 @@ class Views(object):
     def table(self):
         table = go.Figure(data=[go.Table(
             columnorder= [1,2,3,4],
-            columnwidth=[100,1000,200,200],
-            header= dict(values=['Topics','top words','documents count','proportion'],height=60),
+            columnwidth=[50,500,100,100],
+            header= dict(
+                values=['TOPICS','TOP WORDS','DOCUMENTS COUNT','PROPORTION IN THE CORPUS'],
+                height=30,
+                fill=dict(color='black'),
+                align='center',
+                font=dict(size=14,color='white')),
+            hoverinfo = 'all',
             cells= dict(values=[
                 [id for id in range(self.model.number_topics)],
                 [self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)],
                 [len(self.model.documents_for_topic(id)) for id in range(self.model.number_topics)],
-                self.model.topics_frequency()
+                np.around(self.model.topics_frequency(),2)
             ],
-            height=40
+            fill=dict(color=[['lightgrey','white']*int(self.model.number_topics+1/2)]),
+            font=dict(color='black'),
+            height=30,
+            line_color='darkslategray'
             )
         )],
         layout=go.Layout(
                 plot_bgcolor='white',
                 autosize=False,
                 width=1500,
-                height=900
+                height=900,
+                clickmode = 'event'
             )
         )
         return table

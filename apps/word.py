@@ -17,7 +17,9 @@ layout = html.Div([
         ),
         width={"size": 3, "offset": 1}
     )),
-    html.H3(id='word-id')
+    html.Br(),
+    html.H3(id='word-id'),
+    html.Div(id = 'stats-word')
 
 ])
 
@@ -29,10 +31,13 @@ def initialisation_word(word_id):
     else :
         return word_id
 
-@app.callback(Output('word-id','children'),[Input('word-selection','value')])
+@app.callback([Output('word-id','children'),Output('stats-word','children')],[Input('word-selection','value')])
 
-def update_word(word):
-    if word == '':
+def update_word(word_id):
+    if word_id == '':
         raise PreventUpdate
     else:
-        return view.model.corpus.word_for_id(int(word))
+        word = view.model.corpus.word_for_id(int(word_id))
+        nb_docs = view.model.nb_docs_for_word(int(word_id))
+
+        return word,'Documents where ' + word + ' is present : ' + str(nb_docs)
