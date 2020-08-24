@@ -19,7 +19,8 @@ layout = html.Div([
     )),
     html.Br(),
     html.H3(id='word-id'),
-    html.Div(id = 'stats-word')
+    html.Div(id = 'stats-word'),
+    dcc.Graph(id= 'freq-word')
 
 ])
 
@@ -31,7 +32,7 @@ def initialisation_word(word_id):
     else :
         return word_id
 
-@app.callback([Output('word-id','children'),Output('stats-word','children')],[Input('word-selection','value')])
+@app.callback([Output('word-id','children'),Output('stats-word','children'),Output('freq-word','figure')],[Input('word-selection','value')])
 
 def update_word(word_id):
     if word_id == '':
@@ -39,5 +40,14 @@ def update_word(word_id):
     else:
         word = view.model.corpus.word_for_id(int(word_id))
         nb_docs = view.model.nb_docs_for_word(int(word_id))
+        figure = view.frequency_word_topics(int(word_id))
 
-        return word,'Documents where ' + word + ' is present : ' + str(nb_docs)
+        return word,'Documents where ' + word + ' is present : ' + str(nb_docs),figure
+
+@app.callback([Output('store-id-word','data'),Output('store-path-word', 'data')],[Input('freq-word','clickData')])
+
+def store_pathname(clickData):
+    if clickData == None:
+        raise PreventUpdate
+    else:
+        return str(clickData['points'][0]['pointNumber']),'/topic'

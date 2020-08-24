@@ -104,6 +104,11 @@ class TopicModel(object):
     def topic_distribution_for_word(self,word_id):
         return self.topic_word_matrix[:,word_id]
 
+    def frequency_word_for_topics(self,word_id):
+        vector = self.topic_distribution_for_word(word_id)
+        freq = vector*100/np.sum(vector)
+        return np.around(freq,decimals=2)
+
     def display_top_words_1topic(self,topic_id,nb_words):
         top_words = [self.top_words_all_topics[topic_id][i][0] for i in range(nb_words)]
         return ', '.join(top_words)     

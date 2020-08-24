@@ -23,7 +23,9 @@ app.layout = dbc.Container(
         dcc.Store(id='store-path-overview',storage_type='session',clear_data=True),
         dcc.Store(id='store-id-topic-doc',storage_type='session',clear_data=True),
         dcc.Store(id='store-id-topic-word',storage_type='session',clear_data=True),
-        dcc.Store(id='store-path-topic',storage_type='session',clear_data=True)
+        dcc.Store(id='store-path-topic',storage_type='session',clear_data=True),
+        dcc.Store(id='store-id-word',storage_type='session',clear_data=True),
+        dcc.Store(id='store-path-word',storage_type='session',clear_data=True),
     ]),
     fluid=True
 )
@@ -31,16 +33,21 @@ inputs_index = [Input(str(id),'n_clicks') for id in range(view.model.number_topi
 inputs_index.insert(0,Input('store-id-overview','data'))
 inputs_index.insert(1,Input('store-path-overview','data'))
 inputs_index.insert(2,Input('store-path-topic','data'))
+inputs_index.insert(3,Input('store-id-word','data'))
+inputs_index.insert(4,Input('store-path-word','data'))
+
 
 @app.callback([Output('url','search'),Output('url','pathname')],inputs_index)
 
-def update_pathname(store_id_overview,store_path_overview,store_path_topic,*args):
+def update_pathname(store_id_overview,store_path_overview,store_path_topic,store_id_word,store_path_word,*args):
     ctx = dash.callback_context
     c = ctx.triggered[0]['prop_id'].split('.')[0]
-    if (not ctx.triggered or c =='store-id-overview' or c =='store-path-overview') and store_id_overview==None :
+    if not ctx.triggered or ((c =='store-id-overview' or c =='store-path-overview') and store_id_overview==None) or ((c =='store-id-word' or c =='store-path-word') and store_id_word==None):
         raise PreventUpdate
     elif  c =='store-id-overview' or c =='store-path-overview':
         return store_id_overview, store_path_overview
+    elif  c =='store-id-word' or c =='store-path-word':
+        return store_id_word, store_path_word
     elif  c =='store-path-topic':
         return '', store_path_topic
     else:
