@@ -14,15 +14,15 @@ class Views(object):
         
     def scaled_topics(self):
         scaled = go.Figure(data=[go.Scatter(
-            x=self.model.topic_2d_coordinates()[:,0], 
-            y=self.model.topic_2d_coordinates()[:,1],
+            x=self.model.topic_coordinates[:,0], 
+            y=self.model.topic_coordinates[:,1],
             hovertemplate= "Topic %{text}: <br> %{customdata} </br><extra></extra>",
             customdata=[self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)],
             mode='markers+text',
             marker=dict (
-                size=self.model.topics_frequency(),
+                size=self.model.topics_proportion,
                 sizemode='area',
-                sizeref=2.*max(self.model.topics_frequency())/(120.**2),
+                sizeref=2.*max(self.model.topics_proportion)/(120.**2),
                 color=colors,
                 showscale=False),
             text=[str(i) for i in range(self.model.number_topics)]
@@ -126,10 +126,10 @@ class Views(object):
         year= self.model.corpus.years[0]
         fig_dict['data'] = [{
             'type':'bar',
-            'x': self.model.topics_frequency_per_dates(self.model.corpus.years)[:,0],
+            'x': self.model.topics_frequency_per_dates[:,0],
             'y': np.linspace(0, self.model.number_topics-1,self.model.number_topics),
             'orientation' : 'h',
-            'text' : self.model.topics_frequency_per_dates(self.model.corpus.years)[:,0],
+            'text' : self.model.topics_frequency_per_dates[:,0],
             'texttemplate' : '%{text:.3s}',
             'textfont' : {'size':18},
             'textposition' : 'inside',
@@ -145,10 +145,10 @@ class Views(object):
             frame = {"data": [], "name": str(year)}
             frame["data"] = [{
                 'type':'bar',
-                'x': self.model.topics_frequency_per_dates(self.model.corpus.years)[:,year],
+                'x': self.model.topics_frequency_per_dates[:,year],
                 'y': np.linspace(0, self.model.number_topics-1,self.model.number_topics),
                 'orientation' : 'h',
-                'text' : self.model.topics_frequency_per_dates(self.model.corpus.years)[:,year],
+                'text' : self.model.topics_frequency_per_dates[:,year],
                 'texttemplate' : '%{text:.3s}',
                 'textfont' : {'size':18},
                 'textposition' : 'inside',
@@ -173,7 +173,7 @@ class Views(object):
     def streamgraph(self):
         if self.model.corpus.dates==False:
             raise Exception('dates are missing')
-        freq_matrix = self.model.topics_cumulative_frequencies(self.model.corpus.years)
+        freq_matrix = self.model.topics_cumulative_frequencies
         x=self.model.corpus.years
         streamgraph = go.Figure()
         streamgraph.add_trace(go.Scatter(
@@ -230,8 +230,8 @@ class Views(object):
             cells= dict(values=[
                 [id for id in range(self.model.number_topics)],
                 [self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)],
-                [len(self.model.documents_for_topic(id)) for id in range(self.model.number_topics)],
-                np.around(self.model.topics_frequency(),2)
+                [len(self.model.documents_all_topics[id]) for id in range(self.model.number_topics)],
+                np.around(self.model.topics_proportion,2)
             ],
             fill=dict(color=[['lightgrey','white']*int(self.model.number_topics+1/2)]),
             font=dict(color='black'),

@@ -9,7 +9,7 @@ import copy
 from app import app,view,available_topics
 
 nb_words = 50
-nb_max_docs = view.model.max_number_docs()
+nb_max_docs = view.model.max_number_docs
 
 layout = html.Div(children=[
     dcc.Store(id='store-top-words',storage_type='session',clear_data=True),
@@ -37,7 +37,7 @@ layout = html.Div(children=[
     ])
 ])
 
-outputs_topic = [Output('word'+str(w),'children') for w in range(nb_words)] + [Output('doc'+str(doc),'children') for doc in range(nb_max_docs)] + [Output('doc'+str(doc),'style') for doc in range(view.model.max_number_docs())]
+outputs_topic = [Output('word'+str(w),'children') for w in range(nb_words)] + [Output('doc'+str(doc),'children') for doc in range(nb_max_docs)] + [Output('doc'+str(doc),'style') for doc in range(nb_max_docs)]
 outputs_topic.insert(0,Output('title-topic','children'))
 outputs_topic.append(Output('graph-frequency-container','style'))
 outputs_topic.append(Output('frequency-per-years','figure'))
@@ -53,8 +53,8 @@ def update_topic_page(topic_id):
         raise PreventUpdate
     else:
         title = 'Topic ' + topic_id
-        list_words = [view.model.top_words_topic(int(topic_id),nb_words)[w][0] for w in range(nb_words)]
-        docs = view.model.documents_for_topic(int(topic_id))
+        list_words = [view.model.top_words_all_topics[int(topic_id)][w][0] for w in range(nb_words)]
+        docs = view.model.documents_all_topics[int(topic_id)]
         list_docs = [html.Li(children=view.model.corpus.title(docs[d])+', '+str(view.model.corpus.date(docs[d]))) for d in range(len(docs))]
         list_docs_null = ['' for i in range(len(docs),nb_max_docs)]
         list_display_true = [{'display':'block'} for i in range(len(docs))]
