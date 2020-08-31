@@ -8,7 +8,7 @@ import copy
 
 from app import app,view,available_topics
 
-nb_words = 50
+nb_words = 10
 nb_max_docs = view.model.max_number_docs
 
 layout = html.Div(children=[

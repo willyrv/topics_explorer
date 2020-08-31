@@ -10,7 +10,9 @@ from app import app,view
 nb_docs = 10
 
 layout = html.Div([
+    dcc.Store(id='store-all-related-docs',storage_type='session',clear_data=True),
     dcc.Store(id='store-related-docs',storage_type='session',clear_data=True),
+    dcc.Store(id='nb-page-list-related-docs',storage_type='session',clear_data=True),
     dbc.Row(dbc.Col(html.Div(['Click to select a document']),width={"size": 6, "offset": 1})),
     html.Br(),
     dbc.Row(dbc.Col(
@@ -32,6 +34,9 @@ layout = html.Div([
     dbc.Col([
         html.H5("Related documents"),
         html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)]),
+        dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
+        dbc.Button('Next',id='next-related-docs',n_clicks=0),
+        html.Div(id='display-nb-page')
     ])
 ])
 inputs_doc = [Input('related-doc'+str(d),'n_clicks') for d in range(nb_docs)]
@@ -50,28 +55,45 @@ def update_doc_selection(doc_id,list_related_docs,*args):
     else:
         return doc_id
 
-
-outputs_doc = [Output('related-doc'+ str(doc),'children') for doc in range(nb_docs)]
-outputs_doc.append(Output('title-doc','children'))
-outputs_doc.append(Output('date-doc','children'))
-outputs_doc.append(Output('full-doc','children'))
-outputs_doc.append(Output('store-related-docs','data'))
-
-@app.callback(outputs_doc,[Input('doc-selection','value')])
+@app.callback([
+    Output('title-doc','children'),
+    Output('date-doc','children'),
+    Output('full-doc','children'),
+    Output('store-all-related-docs','data'),
+    Output('previous-related-docs','n_clicks'),
+    Output('next-related-docs','n_clicks')],
+    [Input('doc-selection','value')])
 
 def update_doc(doc_id):
 
     if doc_id == None or doc_id == '':
         raise PreventUpdate
     else:
-        list_related_docs = view.model.closest_docs(doc_id,nb_docs)
-        list_arg = [html.Li(children=view.model.corpus.title(d)+', '+str(view.model.corpus.date(d))) for d in list_related_docs]
+        list_related_docs = view.model.closest_docs(doc_id)        
         title = 'Document ' + doc_id +': ' + view.model.corpus.title(int(doc_id))
         date = 'published in ' + str(view.model.corpus.date(int(doc_id)))
         full_text = view.model.corpus.full_text(int(doc_id))
-        list_arg.append(title)
-        list_arg.append(date)
-        list_arg.append(full_text)
-        list_arg.append(list_related_docs)
-        return tuple(list_arg)
+        return title,date,full_text,list_related_docs,0,0
+
+outputs_doc = [Output('related-doc'+ str(doc),'children') for doc in range(nb_docs)]
+outputs_doc.append(Output('store-related-docs','data'))
+
+@app.callback(outputs_doc,[Input('nb-page-list-related-docs','data'),Input('store-all-related-docs','data')])
+
+def update_list_doc(id_page,list_related_docs):
+    if id_page == None:
+        raise PreventUpdate
+    ind = id_page*9+id_page
+    list_docs = list_related_docs[ind:ind+nb_docs]
+    list_arg = [html.Li(children=view.model.corpus.title(d)+', '+str(view.model.corpus.date(d))) for d in list_docs]
+    list_arg.append(list_docs)
+    return tuple(list_arg)
+
+@app.callback([Output('display-nb-page','children'),Output('nb-page-list-related-docs','data')],[Input('next-related-docs','n_clicks'),Input('previous-related-docs','n_clicks')])
+
+def update_nb_page_list(btn_next,btn_prev):
+    if btn_next-btn_prev < 0:
+        raise PreventUpdate
+    return 'Documents ' + str((btn_next-btn_prev)*10+1) + ' to ' + str((1+btn_next-btn_prev)*10), btn_next-btn_prev
+
 

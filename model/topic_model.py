@@ -93,6 +93,8 @@ class TopicModel(object):
                 dist_ij = np.sum(np.abs(np.log(doc_i)-np.log(doc_j)))
                 matrix_docs[i,j]=dist_ij
                 matrix_docs[j,i]=dist_ij
+                matrix_docs[i,i]=100000
+        matrix_docs = np.argsort(matrix_docs,1)        
         self.related_docs = matrix_docs
 
         
@@ -127,11 +129,8 @@ class TopicModel(object):
             return np.around(self.topics_frequency_per_dates[topic_id,date],decimals=2)
 
     #related docs    
-    def closest_docs(self,doc_id,nb_docs): 
-        weights = self.related_docs[:,int(doc_id)]
-        weights[int(doc_id)] = 1000
-        docs = np.argsort(weights)
-        return docs[:self.nb_docs]
+    def closest_docs(self,doc_id): 
+        return self.related_docs[int(doc_id),:]
 
     #words
     def nb_docs_for_word(self,word_id):

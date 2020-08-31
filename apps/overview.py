@@ -10,12 +10,13 @@ from app import app,view
 
 layout = html.Div(children=[
     dbc.ButtonGroup([
+        dbc.Button('Wordcloud', id='wordcloud-button',n_clicks=0),
         dbc.Button('Table', id='table-button', n_clicks=0),
         dbc.Button('Scaled', id='scaled-button', n_clicks=0),
         dbc.Button('Racing Bar', id='racing-bar-button', n_clicks=0),
         dbc.Button('Stacked', id='stacked-button', n_clicks=0)
     ],
-    size = 'lg'
+    size='lg',
     ),
     dbc.Row(
         dbc.Col(
@@ -23,7 +24,8 @@ layout = html.Div(children=[
                 html.Br(),
                 html.H3(id='title'),
                 html.Div(id='alert-overview',style={'display':'none'},children=[dbc.Alert('This view are not available because data is missing.',color='info')]),
-                html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph')])
+                html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph',config=dict(responsive=True))]),
+                html.Div(id='image-overview-container',children=html.Img(src=app.get_asset_url('corpus.png'),height=300,width=500))
                 
             ]),
             width={"size": 8, "offset": 1}
@@ -32,11 +34,12 @@ layout = html.Div(children=[
     
 ])
 
-@app.callback([Output('alert-overview','style'),Output('graph-overview-container','style'),Output('graph', 'figure'),Output('title','children')],
-              [Input('table-button','n_clicks'),Input('scaled-button', 'n_clicks'),Input('racing-bar-button', 'n_clicks'),Input('stacked-button', 'n_clicks')])
+@app.callback([Output('alert-overview','style'),Output('graph-overview-container','style'),Output('image-overview-container','style'),Output('graph', 'figure'),Output('title','children')],
+              [Input('wordcloud-button','n_clicks'),Input('table-button','n_clicks'),Input('scaled-button', 'n_clicks'),Input('racing-bar-button', 'n_clicks'),Input('stacked-button', 'n_clicks')])
 
-def update_view(btn1, btn2, btn3, btn4):
+def update_view(btn1, btn2, btn3, btn4,btn5):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    display_image = {'display':'none'}
     display_alert = {'display':'none'}
     display_graph = {'display':'block'}
     if 'scaled-button' in changed_id:
@@ -58,10 +61,16 @@ def update_view(btn1, btn2, btn3, btn4):
         else:
             fig = view.streamgraph()
         title = 'Stacked view'
-    else:
+    elif 'table-button' in changed_id:
         fig = view.table()
         title = 'Table view'
-    return display_alert,display_graph,fig,title
+    else :
+        display_graph = {'display':'none'}
+        display_image = {'display':'block'}
+        title = 'Wordcloud of the entire corpus'
+        fig = view.scaled_topics()
+    
+    return display_alert,display_graph,display_image,fig,title
 
 @app.callback([Output('store-id-overview','data'),Output('store-path-overview', 'data')],[Input('graph','clickData')])
 
