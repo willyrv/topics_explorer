@@ -13,7 +13,7 @@ from sklearn.feature_extraction.text import TfidfTransformer as TfIdf
 class TopicModel(object):
     def __init__(self,corpus,number_topics,nb_words,nb_docs):
         self.corpus = corpus  # a Corpus object
-        self.number_topics = number_topics  # a scalar vralue > 1
+        self.number_topics = number_topics  # a scalar value > 1
         self.nb_words = nb_words # number top words 
         self.nb_docs = nb_docs #number related docs
         
@@ -30,27 +30,27 @@ class TopicModel(object):
 
         #top words and documents for topics
         list_top_words_all_topics = []
-        list_docs_all_topics = []
+        list_top_docs_all_topics = []
         for topic_id in range(self.number_topics):
-            doc_ids = []
+            weighted_docs = []
             vector_topic_dist = self.topic_word_matrix[topic_id,:]
+            vector_doc_dist = self.document_topic_matrix[:,topic_id]
             weighted_words = []
 
-            for word_id, weight in enumerate(vector_topic_dist):
-                weighted_words.append((self.corpus.word_for_id(word_id), weight))
+            for word_id, weight_w in enumerate(vector_topic_dist):
+                weighted_words.append((self.corpus.word_for_id(word_id), weight_w))
             weighted_words.sort(key=itemgetter(1),reverse=True)
 
-            for doc_id in range(self.corpus.size):
-                most_likely_topic = np.argmax(self.document_topic_matrix[doc_id,:])
-                if most_likely_topic == topic_id:
-                    doc_ids.append(doc_id)
+            for doc_id,weight_d in enumerate(vector_doc_dist):
+                weighted_docs.append((doc_id, weight_d))
+            weighted_docs.sort(key=itemgetter(1),reverse=True)
 
-            list_top_words_all_topics.append(weighted_words[:self.nb_words])
-            list_docs_all_topics.append(doc_ids)
+
+            list_top_words_all_topics.append(weighted_words)
+            list_top_docs_all_topics.append(weighted_docs)
 
         self.top_words_all_topics = list_top_words_all_topics
-        self.documents_all_topics = list_docs_all_topics
-        self.max_number_docs = np.max([len(self.documents_all_topics[id]) for id in range(self.number_topics)])
+        self.top_docs_all_topics = list_top_docs_all_topics
 
         #distance topics : scaled view
         matrix_topics = np.zeros((self.number_topics,self.number_topics))

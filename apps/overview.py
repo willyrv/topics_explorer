@@ -25,7 +25,7 @@ layout = html.Div(children=[
                 html.H3(id='title'),
                 html.Div(id='alert-overview',style={'display':'none'},children=[dbc.Alert('This view are not available because data is missing.',color='info')]),
                 html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph',config=dict(responsive=True))]),
-                html.Div(id='image-overview-container',children=html.Img(src=app.get_asset_url('corpus.png'),height=300,width=500))
+                html.Div(id='image-overview-container',children=html.Img(src=app.get_asset_url('ASRS1000docs_corpus.png'),height=300,width=500))
                 
             ]),
             width={"size": 8, "offset": 1}

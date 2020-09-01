@@ -238,7 +238,7 @@ class Views(object):
             columnorder= [1,2,3,4],
             columnwidth=[50,500,100,100],
             header= dict(
-                values=['TOPICS','TOP WORDS','DOCUMENTS COUNT','PROPORTION IN THE CORPUS'],
+                values=['TOPICS','TOP WORDS','PROPORTION IN THE CORPUS'],
                 height=30,
                 fill=dict(color='black'),
                 align='center',
@@ -247,7 +247,6 @@ class Views(object):
             cells= dict(values=[
                 [id for id in range(self.model.number_topics)],
                 [self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)],
-                [len(self.model.documents_all_topics[id]) for id in range(self.model.number_topics)],
                 np.around(self.model.topics_proportion,2)
             ],
             fill=dict(color=[['lightgrey','white']*int(self.model.number_topics+1/2)]),

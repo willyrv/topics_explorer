@@ -7,9 +7,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 class Corpus(object):
     #dates : boolean, true if data contains dates (by default true)
     
-    def __init__(self, source_file_path, language='english', dates=True):
+    def __init__(self, data, language='english', dates=True):
         
-        self.data = pd.read_csv(source_file_path,sep='|')
+        self.data = data
         self.language = language
         vectorizer = CountVectorizer(stop_words=language)
         self.size = self.data.count(0)[0]

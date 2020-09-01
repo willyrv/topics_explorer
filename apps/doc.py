@@ -36,7 +36,7 @@ layout = html.Div([
         html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)]),
         dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
         dbc.Button('Next',id='next-related-docs',n_clicks=0),
-        html.Div(id='display-nb-page')
+        html.Div(id='display-nb-page-doc')
     ])
 ])
 inputs_doc = [Input('related-doc'+str(d),'n_clicks') for d in range(nb_docs)]
@@ -89,7 +89,7 @@ def update_list_doc(id_page,list_related_docs):
     list_arg.append(list_docs)
     return tuple(list_arg)
 
-@app.callback([Output('display-nb-page','children'),Output('nb-page-list-related-docs','data')],[Input('next-related-docs','n_clicks'),Input('previous-related-docs','n_clicks')])
+@app.callback([Output('display-nb-page-doc','children'),Output('nb-page-list-related-docs','data')],[Input('next-related-docs','n_clicks'),Input('previous-related-docs','n_clicks')])
 
 def update_nb_page_list(btn_next,btn_prev):
     if btn_next-btn_prev < 0:
