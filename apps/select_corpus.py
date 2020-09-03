@@ -32,4 +32,4 @@ def update_choice_corpus(rows,selection):
         file = open('path_model.txt','w')
         file.write('assets/{}_{}topics/'.format(rows[selection[0]]['name'],rows[selection[0]]['number_topics']))
         file.close()
-    return 'Selected dataset :' + name
+    return 'Selected dataset :' + rows[selection[0]]['name']
