@@ -6,7 +6,8 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
 from app import app,view
-from apps import overview, topic, dictionary, doc, word
+from apps import overview, topic, dictionary, doc, word, select_corpus
+import input
 
 from navbar import Navbar
 
@@ -16,7 +17,7 @@ nav = Navbar()
 app.layout = dbc.Container(
     html.Div([
         nav,
-        dcc.Location(id='url', refresh=False),
+        dcc.Location(id='url',refresh=False),
         html.Br(),
         html.Div(id='page-content'),
         dcc.Store(id='store-id-overview',storage_type='session',clear_data=True),
@@ -57,8 +58,10 @@ def update_pathname(store_id_overview,store_path_overview,store_path_topic,store
 @app.callback(Output('page-content', 'children'),[Input('url', 'pathname')])
 def display_page(pathname):
     if pathname == '/':
+        return select_corpus.layout
+    if pathname == '/overview':
         return overview.layout
-    elif pathname == '/topic':
+    elif '/topic' in pathname:
         return topic.layout
     elif pathname == '/dictionary':
         return dictionary.layout
@@ -66,6 +69,8 @@ def display_page(pathname):
         return doc.layout
     elif pathname == '/word':
         return word.layout
+    elif pathname == '/upload':
+        return input.layout
     else:
         return '404'
 

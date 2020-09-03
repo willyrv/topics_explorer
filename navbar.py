@@ -8,7 +8,7 @@ from app import app,view
 def Navbar():
     navbar = dbc.NavbarSimple(
         children=[
-            dbc.NavItem(dbc.NavLink("Overview",href="/")),
+            dbc.NavItem(dbc.NavLink("Overview",href="/overview")),
             dbc.DropdownMenu(
                 nav=True,
                 in_navbar=True,
@@ -21,6 +21,7 @@ def Navbar():
             dbc.NavItem(dbc.NavLink("Words",href="/word")),
             dbc.NavItem(dbc.NavLink("Documents",href="/doc")),
             dbc.NavItem(dbc.NavLink("Dictionary",href='/dictionary')),
+            dbc.NavItem(dbc.NavLink("Upload",href='/upload'))
             
         ],
         brand="Topics explorer",

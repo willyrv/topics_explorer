@@ -32,8 +32,8 @@ class Views(object):
                 autosize=False,
                 width=1500,
                 height=700,
-                #xaxis=dict(visible=False),
-                #yaxis=dict(visible=False)
+                xaxis=dict(visible=True),
+                yaxis=dict(visible=True)
             )
         )
         return scaled

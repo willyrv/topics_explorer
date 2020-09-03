@@ -12,7 +12,7 @@ layout = dbc.Row([
             html.Br(),
             html.H3("Dictionary"),
             dbc.ListGroup([
-                dbc.ListGroupItem(list(view.model.corpus.index_words.values())[i]) for i in range(len(view.model.corpus.index_words))
+                dbc.ListGroupItem(id='dictionary-word' + str(i),children=list(view.model.corpus.index_words.values())[i]) for i in range(len(view.model.corpus.index_words))
                 ])
             ]),
             width={"size": 8, "offset": 1}
