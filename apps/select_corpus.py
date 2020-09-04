@@ -12,19 +12,32 @@ from app import app
 df = pd.read_csv('available_datasets.csv',sep='|')
 
 layout = html.Div([
-    html.H3("Available datasets"),
-    dash_table.DataTable(
-        id='table-corpus',
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict('records'),
-        row_selectable='single',
-        row_deletable=True
-    ),
-    dbc.ButtonGroup([
-        dbc.Button("Add",id='add-button',n_clicks=0),
-        dbc.Button("Delete",id='delete-button',n_clicks=0)
-    ]),
-    html.Div(id='selected-dataset')
+    dbc.Row(
+        dbc.Col([
+            html.Br(),
+            html.H3("Available datasets"),
+            html.Br(),
+            dash_table.DataTable(
+                id='table-corpus',
+                columns=[{"name": i, "id": i} for i in df.columns],
+                data=df.to_dict('records'),
+                row_selectable='single',
+                row_deletable=True
+            ),
+            dbc.ButtonGroup([
+                dbc.Button("Add",id='add-button',n_clicks=0),
+                dbc.Button("Delete",id='delete-button',n_clicks=0)
+            ],
+            size='lg'),
+            html.Br(),
+            html.Br(),
+            html.H5(id='selected-dataset')
+
+        ],
+        width={"size":10}
+        ),
+        justify='center')
+    
 
 ])
 

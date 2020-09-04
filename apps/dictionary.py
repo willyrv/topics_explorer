@@ -15,7 +15,8 @@ layout = dbc.Row([
                 dbc.ListGroupItem(id='dictionary-word' + str(i),children=list(view.model.corpus.index_words.values())[i]) for i in range(len(view.model.corpus.index_words))
                 ])
             ]),
-            width={"size": 8, "offset": 1}
+            width={"size": 10}
         )
-])
+],
+justify='center')
 

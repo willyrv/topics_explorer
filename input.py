@@ -23,50 +23,59 @@ from app import app
 import pickle
 
 layout = html.Div([
-    html.H3('Upload your dataset'),
-    html.H5('Informations'),
-    dbc.InputGroup(
-        [
-            dbc.InputGroupAddon("Dataset's name", addon_type="prepend"),
-            dbc.Input()            
-        ],
-        className="mb-3",
-        id='dataset-name'
-    ),
-    dbc.InputGroup(
-        [
-            dbc.InputGroupAddon("Description", addon_type="prepend"),
-            dbc.Textarea()            
-        ],
-        className="mb-3",
-        id='dataset-description'
-    ),
-    dbc.InputGroup(
-        [
-            dbc.InputGroupAddon("Number of documents", addon_type="prepend"),
-            dbc.Input(type="number")            
-        ],
-        className="mb-3",
-        id='size-corpus'
-    ),
-    dbc.InputGroup(
-        [
-            dbc.InputGroupAddon("Number of topics", addon_type="prepend"),
-            dbc.Input(type="number")            
-        ],
-        className="mb-3",
-        id='choice-nb-topics'
-    ),
-    html.H5('File'),
-    dcc.Upload(
-        id='upload-data',
-        children=html.Div([
-            'Drag and Drop or ',
-            html.A('Select Files')
-        ]),
-        multiple=False
-    ),
-    html.Div(id='output-data-upload'),
+    dbc.Row(dbc.Col([
+        html.Br(),
+        html.H3('Upload your dataset'),
+        html.Br(),
+        html.Br(),
+        html.H5('Informations'),
+        html.Br(),
+        dbc.InputGroup(
+            [
+                dbc.InputGroupAddon("Dataset's name", addon_type="prepend"),
+                dbc.Input()            
+            ],
+            className="mb-3",
+            id='dataset-name'
+        ),
+        dbc.InputGroup(
+            [
+                dbc.InputGroupAddon("Description", addon_type="prepend"),
+                dbc.Textarea()            
+            ],
+            className="mb-3",
+            id='dataset-description'
+        ),
+        dbc.InputGroup(
+            [
+                dbc.InputGroupAddon("Number of documents", addon_type="prepend"),
+                dbc.Input(type="number")            
+            ],
+            className="mb-3",
+            id='size-corpus'
+        ),
+        dbc.InputGroup(
+            [
+                dbc.InputGroupAddon("Number of topics", addon_type="prepend"),
+                dbc.Input(type="number")            
+            ],
+            className="mb-3",
+            id='choice-nb-topics'
+        ),
+        html.Br(),
+        html.H5('File'),
+        html.Br(),
+        dcc.Upload(
+            id='upload-data',
+            children=html.Div([
+                html.A('Click to select a file')
+            ]),
+            multiple=False
+        ),
+        html.Div(id='output-data-upload'),
+
+    ],width={"size":10}),justify='center')
+    
 ])
 def build_model(name,contents,filename,date,nb_topics,nb_words=10,nb_docs=10):
     content_type, content_string = contents.split(',')

@@ -13,7 +13,8 @@ layout = html.Div([
     dbc.Row(dbc.Col(
         dbc.Select(
             id = 'word-selection',
-            options = [{'label': id,'value' : w} for w,id in view.model.corpus.index_words.items()]
+            options = [{'label': id,'value' : w} for w,id in view.model.corpus.index_words.items()],
+            value='1',
         ),
         width={"size": 3, "offset": 1}
     )),
@@ -28,7 +29,7 @@ layout = html.Div([
 
 def initialisation_word(word_id):
     if word_id == '' or word_id == None:
-        raise PreventUpdate
+        return '1'
     else :
         return word_id
 

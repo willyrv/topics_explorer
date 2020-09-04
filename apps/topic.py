@@ -19,33 +19,51 @@ layout = html.Div(children=[
     dcc.Store(id='store-docs-topic',storage_type='session',clear_data=True),
     dcc.Store(id='nb-page-docs-topic',storage_type='session',clear_data=True),
 
-    dbc.Row(dbc.Col(html.Div([
+    dbc.Row(dbc.Col([
                 html.Br(),
-                html.H3(id='title-topic')]),
-                width={'offset':1})),
+                html.H3(id='title-topic')],
+                width={'size':10}),
+                justify='center'),
     dbc.Row([
-        dbc.Col(            
-            html.Div([
-                html.Img(id='wordcloud-topic'),
-                html.Br(),
-                html.H5("Top words"),
-                dbc.ListGroup([dbc.ListGroupItem(id='word'+str(w)) for w in range(nb_words)]),
-                dbc.Button('Previous',id='previous-top-words',n_clicks=0),
-                dbc.Button('Next',id='next-top-words',n_clicks=0),
-                html.Div(id='display-nb-page-words')
-            ]),
-            width={"size": 3, "offset": 1}
-        ),
         dbc.Col([
+            html.Br(),
             html.H5('Topic frequency evolution'),
-            html.Div(id='graph-frequency-container',children=[dcc.Graph(id='frequency-per-years')]),
+            html.Br(),
+            html.Div(id='graph-frequency-container',children=[dcc.Graph(id='frequency-per-years')])            
+        ],
+        width={"size":7}),
+        dbc.Col([
+            html.H5("Top words"),
+            dbc.ListGroup([dbc.ListGroupItem(id='word'+str(w)) for w in range(nb_words)]),
+            dbc.Button('Previous',id='previous-top-words',n_clicks=0),
+            dbc.Button('Next',id='next-top-words',n_clicks=0),
+            html.Div(id='display-nb-page-words')
+        ],
+        width={"size":3})
+        
+    ],
+    justify='center'),
+    dbc.Row([        
+         dbc.Col([
             html.H5('Related documents'),
             html.Ul([html.Li(id = 'doc' + str(doc)) for doc in range(nb_docs)]),
             dbc.Button('Previous',id='previous-docs-topic',n_clicks=0),
             dbc.Button('Next',id='next-docs-topic',n_clicks=0),
             html.Div(id='display-nb-page-topic')
-        ])
-    ])
+        ],
+        width={"size":6}),
+        dbc.Col(            
+            html.Div([
+                html.Br(),
+                html.Br(),
+                html.Br(),
+                html.Img(id='wordcloud-topic',style={"width": '100%'}),
+                               
+            ]),
+            width={"size": 4}
+        )
+
+    ],justify='center')
 ])
 
 @app.callback([
@@ -63,18 +81,17 @@ layout = html.Div(children=[
 
 def update_topic_page(topic_id):
     if topic_id == None or topic_id == '':
-        raise PreventUpdate
+        topic_id = '0'
+    title = 'Topic ' + topic_id
+    list_words = [w for (w,weight) in view.model.top_words_all_topics[int(topic_id)]]
+    docs = [id for (id, weigth) in view.model.top_docs_all_topics[int(topic_id)]]
+    if view.model.corpus.dates==False:
+        display= {'display':'none'}
+        fig = view.scaled_topics()
     else:
-        title = 'Topic ' + topic_id
-        list_words = [w for (w,weight) in view.model.top_words_all_topics[int(topic_id)]]
-        docs = [id for (id, weigth) in view.model.top_docs_all_topics[int(topic_id)]]
-        if view.model.corpus.dates==False:
-            display= {'display':'none'}
-            fig = view.scaled_topics()
-        else:
-            display = {'display':'block'}
-            fig = view.frequency_topic_evolution(int(topic_id))
-            source = app.get_asset_url(path[7:]+'topic{}.png'.format(topic_id))
+        display = {'display':'block'}
+        fig = view.frequency_topic_evolution(int(topic_id))
+        source = app.get_asset_url(path[7:]+'topic{}.png'.format(topic_id))
 
     return title,display,fig,list_words,0,0,docs,0,0,source
 

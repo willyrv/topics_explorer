@@ -9,14 +9,17 @@ from dash.exceptions import PreventUpdate
 from app import app,view,path
 
 layout = html.Div(children=[
-    dbc.ButtonGroup([
-        dbc.Button('Wordcloud', id='wordcloud-button',n_clicks=0),
-        dbc.Button('Table', id='table-button', n_clicks=0),
-        dbc.Button('Scaled', id='scaled-button', n_clicks=0),
-        dbc.Button('Racing Bar', id='racing-bar-button', n_clicks=0),
-        dbc.Button('Stacked', id='stacked-button', n_clicks=0)
-    ],
-    size='lg',
+    dbc.Row(
+        dbc.ButtonGroup([
+            dbc.Button('Wordcloud', id='wordcloud-button',n_clicks=0),
+            dbc.Button('Table', id='table-button', n_clicks=0),
+            dbc.Button('Scaled', id='scaled-button', n_clicks=0),
+            dbc.Button('Racing Bar', id='racing-bar-button', n_clicks=0),
+            dbc.Button('Stacked', id='stacked-button', n_clicks=0)],
+            size='lg'
+        ),
+        justify='center'
+
     ),
     dbc.Row(
         dbc.Col(
@@ -24,12 +27,15 @@ layout = html.Div(children=[
                 html.Br(),
                 html.H3(id='title'),
                 html.Div(id='alert-overview',style={'display':'none'},children=[dbc.Alert('This view are not available because data is missing.',color='info')]),
-                html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph',config=dict(responsive=True))]),
-                html.Div(id='image-overview-container',children=html.Img(src=app.get_asset_url(path[7:]+'corpus.png'),height=300,width=500))
+                html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph')]),
+                html.Br(),
+                html.Br(),
+                html.Div(id='image-overview-container',children=html.Img(src=app.get_asset_url(path[7:]+'corpus.png'),style={"width":'70%','height':'70%'}))
                 
             ]),
-            width={"size": 8, "offset": 1}
-        )
+            width={"size": 10}
+        ),
+        justify='center'
     )
     
 ])

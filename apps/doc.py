@@ -13,32 +13,58 @@ layout = html.Div([
     dcc.Store(id='store-all-related-docs',storage_type='session',clear_data=True),
     dcc.Store(id='store-related-docs',storage_type='session',clear_data=True),
     dcc.Store(id='nb-page-list-related-docs',storage_type='session',clear_data=True),
-    dbc.Row(dbc.Col(html.Div(['Click to select a document']),width={"size": 6, "offset": 1})),
-    html.Br(),
-    dbc.Row(dbc.Col(
-        dbc.Select(
-            id = 'doc-selection',
-            options = [{'label': view.model.corpus.title(id),'value' : id} for id in range(view.model.corpus.size)]            
+
+    dbc.Row(
+        dbc.Col(html.Div(['Click to select a document']),width={"size": 10}),
+        justify='center'
         ),
-        width={"size": 6, "offset": 1}       
-       
-    )),
-    dbc.Col([html.Br(),
-    html.H3(id='title-doc'),
     html.Br(),
-    html.H6(id='date-doc'),
+    dbc.Row([
+        dbc.Col(
+            dbc.Select(
+                id = 'doc-selection',
+                options = [{'label': view.model.corpus.title(id),'value' : id} for id in range(view.model.corpus.size)]      
+                ),
+            width={"size": 10}       
+        )
+    ],
+    justify='center'),
+    dbc.Row(
+        dbc.Col([
+            html.Br(),
+            html.H3(id='title-doc'),
+            html.Br(),
+            html.H6(id='date-doc'),
+            html.Br(),
+            html.Div(id='full-doc')],
+            width={"size": 10}
+        ),
+        justify='center'     
+    ),
     html.Br(),
-    html.Div(id='full-doc')],
-    width={"size": 12}),
-    html.Br(),
-    dbc.Col([
-        html.H5("Related documents"),
-        html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)]),
-        dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
-        dbc.Button('Next',id='next-related-docs',n_clicks=0),
-        html.Div(id='display-nb-page-doc')
-    ]),
-    dcc.Graph(id='freq-doc')
+    dbc.Row([
+        dbc.Col([
+            html.Br(),
+            html.H5("Related documents"),
+            html.Br(),
+            html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)]),
+            dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
+            dbc.Button('Next',id='next-related-docs',n_clicks=0),
+            html.Div(id='display-nb-page-doc')
+        ],
+        width={"size":5}),
+        dbc.Col([
+            html.Br(),
+            html.H5("Proportion of each topic in the document"),
+            dcc.Graph(id='freq-doc')
+
+            ],            
+            width={"size" : 5}
+        )
+        ],
+        justify='center'
+    )   
+    
 ])
 inputs_doc = [Input('related-doc'+str(d),'n_clicks') for d in range(nb_docs)]
 inputs_doc.insert(0,Input('store-id-topic-doc','data'))
@@ -69,14 +95,13 @@ def update_doc_selection(doc_id,list_related_docs,*args):
 def update_doc(doc_id):
 
     if doc_id == None or doc_id == '':
-        raise PreventUpdate
-    else:
-        list_related_docs = view.model.closest_docs(doc_id)        
-        title = 'Document ' + doc_id +': ' + view.model.corpus.title(int(doc_id))
-        date = 'published in ' + str(view.model.corpus.date(int(doc_id)))
-        full_text = view.model.corpus.full_text(int(doc_id))
-        fig = view.frequency_doc_topics(int(doc_id))
-        return title,date,full_text,list_related_docs,0,0,fig
+        doc_id='0'
+    list_related_docs = view.model.closest_docs(doc_id)        
+    title = 'Document ' + doc_id +': ' + view.model.corpus.title(int(doc_id))
+    date = 'published in ' + str(view.model.corpus.date(int(doc_id)))
+    full_text = view.model.corpus.full_text(int(doc_id))
+    fig = view.frequency_doc_topics(int(doc_id))
+    return title,date,full_text,list_related_docs,0,0,fig
 
 outputs_doc = [Output('related-doc'+ str(doc),'children') for doc in range(nb_docs)]
 outputs_doc.append(Output('store-related-docs','data'))

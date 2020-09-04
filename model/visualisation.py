@@ -79,7 +79,6 @@ class Views(object):
                 marker_color = colors[:self.model.number_topics],
                 customdata=[self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)])],
             layout= dict(
-                title = 'Proportion of each topic in the document',
                 yaxis=dict(ticksuffix='%'),
                 plot_bgcolor = 'white',
                 xaxis=dict(title='Topics'))                
