@@ -66,10 +66,26 @@ class Views(object):
                 title = 'Frequency of the word for each topic',
                 yaxis=dict(ticksuffix='%'),
                 plot_bgcolor = 'white',
-                xaxis=dict(title='Topics'))
-                
+                xaxis=dict(title='Topics'))                
             )
         return fig
+
+    def frequency_doc_topics(self,doc_id):
+        fig = go.Figure(
+            data=[go.Bar(
+                x=[i for i in range(self.model.number_topics)],
+                y=self.model.frequency_doc_for_topics(doc_id),
+                hovertemplate= "Topic %{x} : %{customdata} <br> %{y} </br><extra></extra>",
+                marker_color = colors[:self.model.number_topics],
+                customdata=[self.model.display_top_words_1topic(topic,10) for topic in range(self.model.number_topics)])],
+            layout= dict(
+                title = 'Proportion of each topic in the document',
+                yaxis=dict(ticksuffix='%'),
+                plot_bgcolor = 'white',
+                xaxis=dict(title='Topics'))                
+            )
+        return fig
+
     
     def racing_bar_graph(self):
         if self.model.corpus.dates==False:

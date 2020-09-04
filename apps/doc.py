@@ -37,7 +37,8 @@ layout = html.Div([
         dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
         dbc.Button('Next',id='next-related-docs',n_clicks=0),
         html.Div(id='display-nb-page-doc')
-    ])
+    ]),
+    dcc.Graph(id='freq-doc')
 ])
 inputs_doc = [Input('related-doc'+str(d),'n_clicks') for d in range(nb_docs)]
 inputs_doc.insert(0,Input('store-id-topic-doc','data'))
@@ -62,6 +63,7 @@ def update_doc_selection(doc_id,list_related_docs,*args):
     Output('store-all-related-docs','data'),
     Output('previous-related-docs','n_clicks'),
     Output('next-related-docs','n_clicks')],
+    Output('freq-doc','figure'),
     [Input('doc-selection','value')])
 
 def update_doc(doc_id):
@@ -73,7 +75,8 @@ def update_doc(doc_id):
         title = 'Document ' + doc_id +': ' + view.model.corpus.title(int(doc_id))
         date = 'published in ' + str(view.model.corpus.date(int(doc_id)))
         full_text = view.model.corpus.full_text(int(doc_id))
-        return title,date,full_text,list_related_docs,0,0
+        fig = view.frequency_doc_topics(int(doc_id))
+        return title,date,full_text,list_related_docs,0,0,fig
 
 outputs_doc = [Output('related-doc'+ str(doc),'children') for doc in range(nb_docs)]
 outputs_doc.append(Output('store-related-docs','data'))
@@ -95,5 +98,14 @@ def update_nb_page_list(btn_next,btn_prev):
     if btn_next-btn_prev < 0:
         raise PreventUpdate
     return 'Documents ' + str((btn_next-btn_prev)*10+1) + ' to ' + str((1+btn_next-btn_prev)*10), btn_next-btn_prev
+
+@app.callback([Output('store-id-doc','data'),Output('store-path-doc', 'data')],[Input('freq-doc','clickData')])
+
+def store_pathname(clickData):
+    if clickData == None:
+        raise PreventUpdate
+    else:
+        return str(clickData['points'][0]['pointNumber']),'/topic'
+
 
 

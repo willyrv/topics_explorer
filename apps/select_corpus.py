@@ -17,8 +17,13 @@ layout = html.Div([
         id='table-corpus',
         columns=[{"name": i, "id": i} for i in df.columns],
         data=df.to_dict('records'),
-        row_selectable='single'
+        row_selectable='single',
+        row_deletable=True
     ),
+    dbc.ButtonGroup([
+        dbc.Button("Add",id='add-button',n_clicks=0),
+        dbc.Button("Delete",id='delete-button',n_clicks=0)
+    ]),
     html.Div(id='selected-dataset')
 
 ])
@@ -33,3 +38,16 @@ def update_choice_corpus(rows,selection):
         file.write('assets/{}_{}topics/'.format(rows[selection[0]]['name'],rows[selection[0]]['number_topics']))
         file.close()
     return 'Selected dataset :' + rows[selection[0]]['name']
+
+@app.callback(Output('store-path-select-corpus','data'),[Input('add-button','n_clicks')])
+
+def update_page_with_add_button(btn):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    if not('add-button' in changed_id):
+        raise PreventUpdate
+    return '/upload'
+
+
+
+
+

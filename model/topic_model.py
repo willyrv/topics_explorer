@@ -111,6 +111,8 @@ class TopicModel(object):
         freq = vector*100/np.sum(vector)
         return np.around(freq,decimals=2)
 
+
+
     def display_top_words_1topic(self,topic_id,nb_words):
         top_words = [self.top_words_all_topics[topic_id][i][0] for i in range(nb_words)]
         return ', '.join(top_words)     
@@ -118,6 +120,11 @@ class TopicModel(object):
     #méthodes doc topic
     def topic_distribution_for_doc(self,doc_id):
         return self.document_topic_matrix[doc_id,:]
+
+    def frequency_doc_for_topics(self,doc_id):
+        vector = self.topic_distribution_for_doc(doc_id)
+        freq = vector*100/np.sum(vector)
+        return np.around(freq,decimals=2)
     
     #évolution importance topics
     def topic_frequency_per_dates(self, topic_id,date=None):
