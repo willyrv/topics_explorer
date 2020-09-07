@@ -7,7 +7,7 @@ from dash.exceptions import PreventUpdate
 
 from app import app,view
 
-nb_docs = 10
+nb_docs = view.model.nb_docs
 
 layout = html.Div([
     dcc.Store(id='store-all-related-docs',storage_type='session',clear_data=True),
@@ -68,19 +68,23 @@ layout = html.Div([
 ])
 inputs_doc = [Input('related-doc'+str(d),'n_clicks') for d in range(nb_docs)]
 inputs_doc.insert(0,Input('store-id-topic-doc','data'))
-inputs_doc.insert(1,Input('store-related-docs','data'))
+inputs_doc.insert(1,Input('store-id-doc-word','data'))
+inputs_doc.insert(2,Input('store-related-docs','data'))
+inputs_doc.insert(3,Input('previous-view','data'))
 
 @app.callback(Output('doc-selection','value'),inputs_doc)
 
-def update_doc_selection(doc_id,list_related_docs,*args):
+def update_doc_selection(doc_id_topic,doc_id_word,list_related_docs,prev_view,*args):
     ctx = dash.callback_context
     c = ctx.triggered[0]['prop_id'].split('.')[0]
-    if doc_id=='' or c =='store-related-docs':
+    if (prev_view=='topic' and doc_id_topic=='') or (prev_view=='word' and doc_id_word=='') or c =='store-related-docs':
         raise PreventUpdate
     elif c!='' and  c[0] =='r':
         return str(list_related_docs[int(c[-1])])
+    elif prev_view=='word':
+        return doc_id_word
     else:
-        return doc_id
+        return doc_id_topic
 
 @app.callback([
     Output('title-doc','children'),
@@ -122,7 +126,7 @@ def update_list_doc(id_page,list_related_docs):
 def update_nb_page_list(btn_next,btn_prev):
     if btn_next-btn_prev < 0:
         raise PreventUpdate
-    return 'Documents ' + str((btn_next-btn_prev)*10+1) + ' to ' + str((1+btn_next-btn_prev)*10), btn_next-btn_prev
+    return 'Documents ' + str((btn_next-btn_prev)*nb_docs+1) + ' to ' + str((1+btn_next-btn_prev)*nb_docs), btn_next-btn_prev
 
 @app.callback([Output('store-id-doc','data'),Output('store-path-doc', 'data')],[Input('freq-doc','clickData')])
 

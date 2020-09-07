@@ -145,6 +145,12 @@ class TopicModel(object):
         nb_docs = vector.count_nonzero()
         return nb_docs
 
+    def docs_for_word(self,word_id):
+        vector = self.corpus.vector_space_data.getcol(word_id)
+        ind = sp.find(vector)
+        list_docs = [(ind[0][i],ind[2][i]) for i in range(len(ind[0]))]
+        return sorted(list_docs,key= lambda x : x[1],reverse=True)
+
 
 
 
