@@ -120,7 +120,10 @@ def update_nb_page_docs_word(btn_next,btn_prev,nb_docs_for_word):
     if nb_page < 0 or ((nb_page-1)*nb_docs+1) > (nb_docs_for_word - (nb_docs-1)):
         raise PreventUpdate
     else:
-        return 'Documents ' + str((nb_page*nb_docs+1)) + ' to ' + str(nb_docs_for_word),nb_page
+        if nb_docs_for_word < (1 + nb_page)*nb_docs:
+            return 'Documents ' + str((nb_page*nb_docs+1)) + ' to ' + str(nb_docs_for_word) + ' of ' + str(nb_docs_for_word),nb_page
+        else : 
+            return 'Documents ' + str((nb_page*nb_docs+1)) + ' to ' + str((1 + nb_page)*nb_docs) + ' of ' + str(nb_docs_for_word),nb_page
 
 inputs_word = [Input('docs-word'+ str(doc),'n_clicks') for doc in range(nb_docs)]
 inputs_word.insert(0,Input('freq-word','clickData'))

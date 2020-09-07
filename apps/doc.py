@@ -124,9 +124,10 @@ def update_list_doc(id_page,list_related_docs):
 @app.callback([Output('display-nb-page-doc','children'),Output('nb-page-list-related-docs','data')],[Input('next-related-docs','n_clicks'),Input('previous-related-docs','n_clicks')])
 
 def update_nb_page_list(btn_next,btn_prev):
-    if btn_next-btn_prev < 0:
+    nb_page = btn_next - btn_prev
+    if nb_page < 0:
         raise PreventUpdate
-    return 'Documents ' + str((btn_next-btn_prev)*nb_docs+1) + ' to ' + str((1+btn_next-btn_prev)*nb_docs), btn_next-btn_prev
+    return 'Documents ' + str((nb_page)*nb_docs+1) + ' to ' + str((1+nb_page)*nb_docs) + ' of ' + str(view.model.corpus.size), nb_page
 
 @app.callback([Output('store-id-doc','data'),Output('store-path-doc', 'data')],[Input('freq-doc','clickData')])
 

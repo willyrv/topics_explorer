@@ -2,9 +2,11 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input,Output
+from dash.dependencies import Input,Output,State
 from dash.exceptions import PreventUpdate
 import pandas as pd
+import shutil
+import os
 
 import dash_table
 from app import app
@@ -24,11 +26,17 @@ layout = html.Div([
                 row_selectable='single',
                 row_deletable=True
             ),
+            dcc.Interval(
+                id='interval-component',
+                interval=60*1000, 
+                n_intervals=0
+            ),
             dbc.ButtonGroup([
                 dbc.Button("Add",id='add-button',n_clicks=0),
-                dbc.Button("Delete",id='delete-button',n_clicks=0)
+                dbc.Button("Save",id='save-button',n_clicks=0)
             ],
             size='lg'),
+            html.Div(id="output-1",children="Press button to save changes"),
             html.Br(),
             html.Br(),
             html.H5(id='selected-dataset')
@@ -58,9 +66,31 @@ def update_page_with_add_button(btn):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if not('add-button' in changed_id):
         raise PreventUpdate
-    return '/upload'
+    else:
+        return '/upload'
 
+@app.callback(
+        Output("output-1","children"),
+        [Input("save-button","n_clicks")],
+        [State("table-corpus","data")]
+        )
 
+def selected_data_to_csv(nclicks,table1): 
+    if nclicks == 0:
+        raise PreventUpdate
+    else:
+        pd.DataFrame(table1).to_csv('available_datasets.csv',index=False,sep='|')
+        return "Data Submitted"
 
-
-
+@app.callback(Output('table-corpus', 'data'),
+              [Input('interval-component', 'n_intervals')])
+def update_table(n):
+    df = pd.read_csv('available_datasets.csv',sep='|')
+    for dataset_name in os.listdir("assets"):
+        if not(dataset_name=='demo'):
+            a = df.loc[(df['name'] == dataset_name.split('_')[0])]
+            b = df.loc[(df['number_topics'] == int(dataset_name.split('_')[1][:-6]))]
+            if a.empty or b.empty:
+                dir_path = 'assets/{}'.format(dataset_name)
+                shutil.rmtree(dir_path)
+    return df.to_dict('records')
