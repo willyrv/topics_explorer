@@ -6,7 +6,9 @@ from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 import copy
 
-from app import app,view,path
+from app import app,update_view_object
+
+view, path = update_view_object()
 
 nb_words = view.model.nb_words
 nb_docs = view.model.nb_docs

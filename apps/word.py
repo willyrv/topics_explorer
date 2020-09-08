@@ -5,7 +5,9 @@ import dash_html_components as html
 from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 
-from app import app,view
+from app import app, update_view_object
+
+view, path = update_view_object()
 
 nb_docs = view.model.nb_docs
 

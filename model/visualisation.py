@@ -29,6 +29,7 @@ class Views(object):
             )],
             layout=go.Layout(
                 autosize=True,
+                height = 700,
                 xaxis=dict(visible=True),
                 yaxis=dict(visible=True)
             )
@@ -103,6 +104,7 @@ class Views(object):
         fig_dict["layout"]["hovermode"] = "closest"
         fig_dict["layout"]["yaxis_type"] = 'category'
         fig_dict['layout']['autosize'] = True
+        fig_dict['layout']['height'] = 700
         fig_dict["layout"]["title"] = {
             'text':"topics' frequencies ",
             'font':dict(size=28),
@@ -229,7 +231,7 @@ class Views(object):
                 y=1.02,
                 x=1
             ),
-            width = 1500,
+            autosize=True,
             height = 700,
             legend_itemclick = False,
             hovermode='x unified',   
@@ -266,7 +268,7 @@ class Views(object):
         )],
         layout=go.Layout(
                 plot_bgcolor='white',
-                autosize=True,
+                #autosize=True,
                 clickmode = 'event'
             )
         )

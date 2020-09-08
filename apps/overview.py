@@ -6,7 +6,9 @@ import dash_html_components as html
 from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 
-from app import app,view,path
+from app import app, update_view_object
+
+view, path = update_view_object()
 
 layout = html.Div(children=[
     dbc.Row(

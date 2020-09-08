@@ -3,7 +3,9 @@ from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 
 
-from app import app,view
+from app import app, update_view_object
+
+view, path = update_view_object()
 
 def Navbar():
     navbar = dbc.NavbarSimple(

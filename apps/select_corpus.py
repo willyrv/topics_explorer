@@ -63,8 +63,7 @@ def update_choice_corpus(rows,selection):
 @app.callback(Output('store-path-select-corpus','data'),[Input('add-button','n_clicks')])
 
 def update_page_with_add_button(btn):
-    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
-    if not('add-button' in changed_id):
+    if btn==0:
         raise PreventUpdate
     else:
         return '/upload'
