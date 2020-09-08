@@ -75,11 +75,11 @@ def update_page_with_add_button(btn):
         [State("table-corpus","data")]
         )
 
-def selected_data_to_csv(nclicks,table1): 
+def selected_data_to_csv(nclicks,table): 
     if nclicks == 0:
         raise PreventUpdate
     else:
-        pd.DataFrame(table1).to_csv('available_datasets.csv',index=False,sep='|')
+        pd.DataFrame(table).to_csv('available_datasets.csv',index=False,sep='|')
         return "Data Submitted"
 
 @app.callback(Output('table-corpus', 'data'),
@@ -93,4 +93,6 @@ def update_table(n):
             if a.empty or b.empty:
                 dir_path = 'assets/{}'.format(dataset_name)
                 shutil.rmtree(dir_path)
+        if os.path.exists('assets/{}/model.pickle'.format(dataset_name)):
+            df.loc[df['name']== dataset_name.split('_')[0]].replace({"loading":'uploading'},'ready')
     return df.to_dict('records')

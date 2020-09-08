@@ -28,10 +28,7 @@ class Views(object):
             text=[str(i) for i in range(self.model.number_topics)]
             )],
             layout=go.Layout(
-                plot_bgcolor='white',
-                autosize=False,
-                width=1500,
-                height=700,
+                autosize=True,
                 xaxis=dict(visible=True),
                 yaxis=dict(visible=True)
             )
@@ -105,9 +102,7 @@ class Views(object):
                                     'tickfont':dict(size=14)}
         fig_dict["layout"]["hovermode"] = "closest"
         fig_dict["layout"]["yaxis_type"] = 'category'
-        fig_dict['layout']['autosize'] = False
-        fig_dict["layout"]["width"] = 1500
-        fig_dict["layout"]["height"] = 700
+        fig_dict['layout']['autosize'] = True
         fig_dict["layout"]["title"] = {
             'text':"topics' frequencies ",
             'font':dict(size=28),
@@ -271,9 +266,7 @@ class Views(object):
         )],
         layout=go.Layout(
                 plot_bgcolor='white',
-                autosize=False,
-                width=1500,
-                height=900,
+                autosize=True,
                 clickmode = 'event'
             )
         )

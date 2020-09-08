@@ -51,7 +51,8 @@ layout = html.Div([
             width={"size": 5}),
         dbc.Col([
             html.H5('Proportion of time the word is assigned to each topic'),
-            dcc.Graph(id= 'freq-word')
+            dcc.Graph(id= 'freq-word'),
+            html.H6('Click on a bar to have more informations about a topic')
             ],
             width={"size": 5}),
         ],
@@ -104,7 +105,7 @@ def update_list_doc(id_page,list_docs_word,nb_docs_for_word):
         list_docs = list_docs_word[ind:ind+nb_docs]
     else:
         list_docs = list_docs_word[ind:nb_docs_for_word] 
-    list_arg = [html.Li(children=view.model.corpus.title(d)+', '+str(view.model.corpus.date(d))) for d in list_docs] + ['' for i in range(ind+nb_docs-nb_docs_for_word)]
+    list_arg = [html.Li(children=view.model.corpus.title(d)+', '+str(view.model.corpus.date(d)),style={"cursor":'pointer'}) for d in list_docs] + ['' for i in range(ind+nb_docs-nb_docs_for_word)]
     list_arg.append(list_docs + ['' for i in range(ind+nb_docs-nb_docs_for_word)])
     return tuple(list_arg)
 

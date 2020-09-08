@@ -108,7 +108,7 @@ def build_model(name,contents,filename,date,nb_topics,nb_words=10,nb_docs=10):
     f.close()
 
     complete_corpus = ','.join(view.model.corpus.data['text'])
-    wc = WordCloud(background_color="white", max_words=1000, contour_width=3, contour_color="steel blue")
+    wc = WordCloud(width = 1024,height=512,background_color="white", max_words=1000, contour_width=3, contour_color="steel blue")
     cloud = wc.generate(complete_corpus)
     cloud.to_file(path + 'corpus.png')
 
@@ -138,7 +138,7 @@ def update_csv(input_name,input_description,choice_nb_topics,input_size,content,
         description = input_description [1]['props']['value']
         nb_topics = choice_nb_topics[1]['props']['value']
         size = input_size[1]['props']['value']
-        myCsvRow = [name,description,str(size),str(nb_topics),'uploading']
+        myCsvRow = [name,description,str(size),str(nb_topics),'ready']
 
         with open('available_datasets.csv','a',newline='') as f:
             writer = csv.writer(f,delimiter='|')
@@ -146,8 +146,5 @@ def update_csv(input_name,input_description,choice_nb_topics,input_size,content,
             f.close()
         
         children = build_model(name,content,filename,date,nb_topics)
-        data = pd.read_csv('available_datasets',sep='|')
-        data.set_value(-1,'loading','ready')
-        data.to_csv('available_datasets.csv',index=False)
             
         return children

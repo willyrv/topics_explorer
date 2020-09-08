@@ -47,7 +47,7 @@ layout = html.Div([
             html.Br(),
             html.H5("Related documents"),
             html.Br(),
-            html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)]),
+            html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)],style={"cursor":'pointer'}),
             dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
             dbc.Button('Next',id='next-related-docs',n_clicks=0),
             html.Div(id='display-nb-page-doc')
@@ -56,7 +56,8 @@ layout = html.Div([
         dbc.Col([
             html.Br(),
             html.H5("Proportion of each topic in the document"),
-            dcc.Graph(id='freq-doc')
+            dcc.Graph(id='freq-doc'),
+            html.H6('Click on a bar to have more informations about a topic')
 
             ],            
             width={"size" : 5}

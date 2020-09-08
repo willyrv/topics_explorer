@@ -34,7 +34,7 @@ layout = html.Div(children=[
         width={"size":7}),
         dbc.Col([
             html.H5("Top words"),
-            dbc.ListGroup([dbc.ListGroupItem(id='word'+str(w)) for w in range(nb_words)]),
+            dbc.ListGroup([dbc.ListGroupItem(id='word'+str(w)) for w in range(nb_words)],style={"cursor":'pointer'}),
             dbc.Button('Previous',id='previous-top-words',n_clicks=0),
             dbc.Button('Next',id='next-top-words',n_clicks=0),
             html.Div(id='display-nb-page-words')
@@ -46,7 +46,7 @@ layout = html.Div(children=[
     dbc.Row([        
          dbc.Col([
             html.H5('Related documents'),
-            html.Ul([html.Li(id = 'doc' + str(doc)) for doc in range(nb_docs)]),
+            html.Ul([html.Li(id = 'doc' + str(doc)) for doc in range(nb_docs)],style={"cursor":'pointer'}),
             dbc.Button('Previous',id='previous-docs-topic',n_clicks=0),
             dbc.Button('Next',id='next-docs-topic',n_clicks=0),
             html.Div(id='display-nb-page-topic')
