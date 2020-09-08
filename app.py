@@ -16,7 +16,6 @@ if not(os.path.exists(path + 'model.pickle')):
 f = open(path + 'model.pickle','rb')
 view = pickle.load(f)
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__,suppress_callback_exceptions=True,external_stylesheets=[dbc.themes.LUX],title='Topics explorer')
 
 server = app.server

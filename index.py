@@ -4,6 +4,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
+from flask import request
 
 from app import app,view
 from apps import overview, topic, dictionary, doc, word, select_corpus
@@ -12,7 +13,6 @@ import input
 from navbar import Navbar
 
 nav = Navbar()
-
 
 app.layout = dbc.Container(
     html.Div([
