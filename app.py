@@ -6,6 +6,9 @@ import dash_bootstrap_components as dbc
 import pickle
 import os
 
+nb_docs = 10
+nb_words = 10
+
 def update_view_object():
     file = open("path_model.txt",'r')
     path = file.readlines()[0]

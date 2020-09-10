@@ -8,8 +8,6 @@ from dash.exceptions import PreventUpdate
 
 from app import app, update_view_object
 
-view, path = update_view_object()
-
 layout = html.Div(children=[
     dbc.Row(
         dbc.ButtonGroup([
@@ -32,7 +30,7 @@ layout = html.Div(children=[
                 html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph')]),
                 html.Br(),
                 html.Br(),
-                html.Div(id='image-overview-container',children=html.Img(src=app.get_asset_url(path[7:]+'corpus.png'),style={"width":'70%','height':'70%'}))
+                html.Div(id='image-overview-container',style={"width":'70%','height':'70%'})
                 
             ]),
             width={"size": 10}
@@ -42,14 +40,16 @@ layout = html.Div(children=[
     
 ])
 
-@app.callback([Output('alert-overview','style'),Output('graph-overview-container','style'),Output('image-overview-container','style'),Output('graph', 'figure'),Output('title','children')],
+@app.callback([Output('alert-overview','style'),Output('graph-overview-container','style'),Output('image-overview-container','style'),Output('image-overview-container','children'),Output('graph', 'figure'),Output('title','children')],
               [Input('wordcloud-button','n_clicks'),Input('table-button','n_clicks'),Input('scaled-button', 'n_clicks'),Input('racing-bar-button', 'n_clicks'),Input('stacked-button', 'n_clicks')])
 
 def update_view(btn1, btn2, btn3, btn4,btn5):
+    view, path = update_view_object()
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     display_image = {'display':'none'}
     display_alert = {'display':'none'}
     display_graph = {'display':'block'}
+    image = html.Img(src=app.get_asset_url(path[7:]+'corpus.png'))
     if 'scaled-button' in changed_id:
         fig = view.scaled_topics()
         title = 'Scaled view'
@@ -78,7 +78,7 @@ def update_view(btn1, btn2, btn3, btn4,btn5):
         title = 'Wordcloud of the entire corpus'
         fig = view.scaled_topics()
     
-    return display_alert,display_graph,display_image,fig,title
+    return display_alert,display_graph,display_image,image,fig,title
 
 @app.callback([Output('store-id-overview','data'),Output('store-path-overview', 'data')],[Input('graph','clickData')])
 

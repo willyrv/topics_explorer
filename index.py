@@ -12,7 +12,7 @@ import input
 from navbar import Navbar
 
 nav = Navbar()
-view, path = update_view_object()
+view = update_view_object()[0]
 
 app.layout = dbc.Container(
     html.Div([
@@ -75,18 +75,19 @@ def update_pathname(store_id_overview,store_path_overview,store_path_topic,store
 @app.callback(Output('page-content', 'children'),[Input('url', 'pathname')])
 
 def display_page(pathname):
+    view = update_view_object()[0]
     if pathname == '/':
         return select_corpus.layout
     if pathname == '/overview':
         return overview.layout
     elif '/topic' in pathname:
-        return topic.layout
+        return topic.topic_layout(view)
     elif pathname == '/dictionary':
-        return dictionary.layout
+        return dictionary.dictionary_layout(view)
     elif pathname == '/doc':
-        return doc.layout
+        return doc.doc_layout(view)
     elif pathname == '/word':
-        return word.layout
+        return word.word_layout(view)
     elif pathname == '/upload':
         return input.layout
     else:

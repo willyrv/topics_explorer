@@ -5,69 +5,69 @@ import dash_html_components as html
 from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 
-from app import app, update_view_object
+from app import app, update_view_object,nb_docs
 
-view, path = update_view_object()
-nb_docs = view.model.nb_docs
+def doc_layout(view):
+    layout = html.Div([
+        dcc.Store(id='store-all-related-docs',storage_type='session',clear_data=True),
+        dcc.Store(id='store-related-docs',storage_type='session',clear_data=True),
+        dcc.Store(id='nb-page-list-related-docs',storage_type='session',clear_data=True),
 
-layout = html.Div([
-    dcc.Store(id='store-all-related-docs',storage_type='session',clear_data=True),
-    dcc.Store(id='store-related-docs',storage_type='session',clear_data=True),
-    dcc.Store(id='nb-page-list-related-docs',storage_type='session',clear_data=True),
-
-    dbc.Row(
-        dbc.Col(html.Div(['Click to select a document']),width={"size": 10}),
-        justify='center'
-        ),
-    html.Br(),
-    dbc.Row([
-        dbc.Col(
-            dbc.Select(
-                id = 'doc-selection',
-                options = [{'label': view.model.corpus.title(id),'value' : id} for id in range(view.model.corpus.size)]      
-                ),
-            width={"size": 10}       
-        )
-    ],
-    justify='center'),
-    dbc.Row(
-        dbc.Col([
-            html.Br(),
-            html.H3(id='title-doc'),
-            html.Br(),
-            html.H6(id='date-doc'),
-            html.Br(),
-            html.Div(id='full-doc')],
-            width={"size": 10}
-        ),
-        justify='center'     
-    ),
-    html.Br(),
-    dbc.Row([
-        dbc.Col([
-            html.Br(),
-            html.H5("Related documents"),
-            html.Br(),
-            html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)],style={"cursor":'pointer'}),
-            dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
-            dbc.Button('Next',id='next-related-docs',n_clicks=0),
-            html.Div(id='display-nb-page-doc')
+        dbc.Row(
+            dbc.Col(html.Div(['Click to select a document']),width={"size": 10}),
+            justify='center'
+            ),
+        html.Br(),
+        dbc.Row([
+            dbc.Col(
+                dbc.Select(
+                    id = 'doc-selection',
+                    options = [{'label': view.model.corpus.title(id),'value' : id} for id in range(view.model.corpus.size)]      
+                    ),
+                width={"size": 10}       
+            )
         ],
-        width={"size":5}),
-        dbc.Col([
-            html.Br(),
-            html.H5("Proportion of each topic in the document"),
-            dcc.Graph(id='freq-doc'),
-            html.H6('Click on a bar to have more informations about a topic')
+        justify='center'),
+        dbc.Row(
+            dbc.Col([
+                html.Br(),
+                html.H3(id='title-doc'),
+                html.Br(),
+                html.H6(id='date-doc'),
+                html.Br(),
+                html.Div(id='full-doc')],
+                width={"size": 10}
+            ),
+            justify='center'     
+        ),
+        html.Br(),
+        dbc.Row([
+            dbc.Col([
+                html.Br(),
+                html.H5("Related documents"),
+                html.Br(),
+                html.Ul([html.Div(id = 'related-doc' + str(doc)) for doc in range(nb_docs)],style={"cursor":'pointer'}),
+                dbc.Button('Previous',id='previous-related-docs',n_clicks=0),
+                dbc.Button('Next',id='next-related-docs',n_clicks=0),
+                html.Div(id='display-nb-page-doc')
+            ],
+            width={"size":5}),
+            dbc.Col([
+                html.Br(),
+                html.H5("Proportion of each topic in the document"),
+                dcc.Graph(id='freq-doc'),
+                html.H6('Click on a bar to have more informations about a topic')
 
-            ],            
-            width={"size" : 5}
-        )
-        ],
-        justify='center'
-    )   
-    
-])
+                ],            
+                width={"size" : 5}
+            )
+            ],
+            justify='center'
+        )   
+        
+    ])
+    return layout
+
 inputs_doc = [Input('related-doc'+str(d),'n_clicks') for d in range(nb_docs)]
 inputs_doc.insert(0,Input('store-id-topic-doc','data'))
 inputs_doc.insert(1,Input('store-id-doc-word','data'))
@@ -99,6 +99,7 @@ def update_doc_selection(doc_id_topic,doc_id_word,list_related_docs,prev_view,*a
     [Input('doc-selection','value')])
 
 def update_doc(doc_id):
+    view = update_view_object()[0]
 
     if doc_id == None or doc_id == '':
         doc_id='0'
@@ -115,6 +116,7 @@ outputs_doc.append(Output('store-related-docs','data'))
 @app.callback(outputs_doc,[Input('nb-page-list-related-docs','data'),Input('store-all-related-docs','data')])
 
 def update_list_doc(id_page,list_related_docs):
+    view = update_view_object()[0]
     if id_page == None:
         raise PreventUpdate
     ind = id_page*9+id_page
@@ -126,6 +128,7 @@ def update_list_doc(id_page,list_related_docs):
 @app.callback([Output('display-nb-page-doc','children'),Output('nb-page-list-related-docs','data')],[Input('next-related-docs','n_clicks'),Input('previous-related-docs','n_clicks')])
 
 def update_nb_page_list(btn_next,btn_prev):
+    view = update_view_object()[0]
     nb_page = btn_next - btn_prev
     if nb_page < 0:
         raise PreventUpdate

@@ -6,67 +6,65 @@ from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 import copy
 
-from app import app,update_view_object
+from app import app,update_view_object,nb_docs,nb_words
 
-view, path = update_view_object()
+def topic_layout(view):
 
-nb_words = view.model.nb_words
-nb_docs = view.model.nb_docs
+    layout = html.Div(children=[
+        dcc.Store(id='store-all-top-words',storage_type='session',clear_data=True),
+        dcc.Store(id='store-top-words',storage_type='session',clear_data=True),
+        dcc.Store(id='nb-page-top-words',storage_type='session',clear_data=True),
+        dcc.Store(id='store-all-docs-topic',storage_type='session',clear_data=True),
+        dcc.Store(id='store-docs-topic',storage_type='session',clear_data=True),
+        dcc.Store(id='nb-page-docs-topic',storage_type='session',clear_data=True),
 
-layout = html.Div(children=[
-    dcc.Store(id='store-all-top-words',storage_type='session',clear_data=True),
-    dcc.Store(id='store-top-words',storage_type='session',clear_data=True),
-    dcc.Store(id='nb-page-top-words',storage_type='session',clear_data=True),
-    dcc.Store(id='store-all-docs-topic',storage_type='session',clear_data=True),
-    dcc.Store(id='store-docs-topic',storage_type='session',clear_data=True),
-    dcc.Store(id='nb-page-docs-topic',storage_type='session',clear_data=True),
-
-    dbc.Row(dbc.Col([
+        dbc.Row(dbc.Col([
+                    html.Br(),
+                    html.H3(id='title-topic')],
+                    width={'size':10}),
+                    justify='center'),
+        dbc.Row([
+            dbc.Col([
                 html.Br(),
-                html.H3(id='title-topic')],
-                width={'size':10}),
-                justify='center'),
-    dbc.Row([
-        dbc.Col([
-            html.Br(),
-            html.H5('Topic frequency evolution'),
-            html.Br(),
-            html.Div(id='graph-frequency-container',children=[dcc.Graph(id='frequency-per-years')])            
+                html.H5('Topic frequency evolution'),
+                html.Br(),
+                html.Div(id='graph-frequency-container',children=[dcc.Graph(id='frequency-per-years')])            
+            ],
+            width={"size":7}),
+            dbc.Col([
+                html.H5("Top words"),
+                dbc.ListGroup([dbc.ListGroupItem(id='word'+str(w)) for w in range(nb_words)],style={"cursor":'pointer'}),
+                dbc.Button('Previous',id='previous-top-words',n_clicks=0),
+                dbc.Button('Next',id='next-top-words',n_clicks=0),
+                html.Div(id='display-nb-page-words')
+            ],
+            width={"size":3})
+            
         ],
-        width={"size":7}),
-        dbc.Col([
-            html.H5("Top words"),
-            dbc.ListGroup([dbc.ListGroupItem(id='word'+str(w)) for w in range(nb_words)],style={"cursor":'pointer'}),
-            dbc.Button('Previous',id='previous-top-words',n_clicks=0),
-            dbc.Button('Next',id='next-top-words',n_clicks=0),
-            html.Div(id='display-nb-page-words')
-        ],
-        width={"size":3})
-        
-    ],
-    justify='center'),
-    dbc.Row([        
-         dbc.Col([
-            html.H5('Related documents'),
-            html.Ul([html.Li(id = 'doc' + str(doc)) for doc in range(nb_docs)],style={"cursor":'pointer'}),
-            dbc.Button('Previous',id='previous-docs-topic',n_clicks=0),
-            dbc.Button('Next',id='next-docs-topic',n_clicks=0),
-            html.Div(id='display-nb-page-topic')
-        ],
-        width={"size":6}),
-        dbc.Col(            
-            html.Div([
-                html.Br(),
-                html.Br(),
-                html.Br(),
-                html.Img(id='wordcloud-topic',style={"width": '100%'}),
-                               
-            ]),
-            width={"size": 4}
-        )
+        justify='center'),
+        dbc.Row([        
+            dbc.Col([
+                html.H5('Related documents'),
+                html.Ul([html.Li(id = 'doc' + str(doc)) for doc in range(nb_docs)],style={"cursor":'pointer'}),
+                dbc.Button('Previous',id='previous-docs-topic',n_clicks=0),
+                dbc.Button('Next',id='next-docs-topic',n_clicks=0),
+                html.Div(id='display-nb-page-topic')
+            ],
+            width={"size":6}),
+            dbc.Col(            
+                html.Div([
+                    html.Br(),
+                    html.Br(),
+                    html.Br(),
+                    html.Img(id='wordcloud-topic',style={"width": '100%'}),
+                                
+                ]),
+                width={"size": 4}
+            )
 
-    ],justify='center')
-])
+        ],justify='center')
+    ])
+    return layout
 
 @app.callback([
     Output('title-topic','children'),
@@ -82,6 +80,7 @@ layout = html.Div(children=[
     [Input('url','search')])
 
 def update_topic_page(topic_id):
+    view, path = update_view_object()
     if topic_id == None or topic_id == '':
         topic_id = '0'
     title = 'Topic ' + topic_id
@@ -103,6 +102,7 @@ inputs_topic.insert(1,Input('store-docs-topic','data'))
 
 @app.callback([Output('store-id-topic-word','data'),Output('store-id-topic-doc','data'),Output('store-path-topic','data')],inputs_topic)
 def click_on_words(list_words,list_docs,*args):
+    view = update_view_object()[0]
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if changed_id[0] == 'w':
         return view.model.corpus.id_for_word(list_words[int(changed_id[4:-9])]),'','/word'
@@ -118,6 +118,7 @@ outputs_topic2.append(Output('store-top-words','data'))
 @app.callback(outputs_topic2,[Input('nb-page-docs-topic','data'),Input('nb-page-top-words','data'),Input('store-all-docs-topic','data'),Input('store-all-top-words','data')])
 
 def update_lists_topic(id_page_doc,id_page_word,list_docs_topic,list_top_words):
+    view = update_view_object()[0]
     if id_page_doc == None or id_page_word ==  None:
         raise PreventUpdate
     ind_doc= id_page_doc*(nb_docs-1)+id_page_doc

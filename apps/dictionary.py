@@ -6,19 +6,19 @@ from dash.exceptions import PreventUpdate
 
 from app import app, update_view_object
 
-view, path = update_view_object()
-
-layout = dbc.Row([
-    dbc.Col(
-        html.Div([
-            html.Br(),
-            html.H3("Dictionary"),
-            dbc.ListGroup([
-                dbc.ListGroupItem(id='dictionary-word' + str(i),children=list(view.model.corpus.index_words.values())[i]) for i in range(len(view.model.corpus.index_words))
-                ])
-            ]),
-            width={"size": 10}
-        )
-],
-justify='center')
+def dictionary_layout(view):
+    layout = dbc.Row([
+        dbc.Col(
+            html.Div([
+                html.Br(),
+                html.H3("Dictionary"),
+                dbc.ListGroup([
+                    dbc.ListGroupItem(id='dictionary-word' + str(i),children=list(view.model.corpus.index_words.values())[i]) for i in range(len(view.model.corpus.index_words))
+                    ])
+                ]),
+                width={"size": 10}
+            )
+    ],
+    justify='center')
+    return layout
 

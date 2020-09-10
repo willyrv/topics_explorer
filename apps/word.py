@@ -5,61 +5,59 @@ import dash_html_components as html
 from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 
-from app import app, update_view_object
+from app import app, update_view_object,nb_docs
 
-view, path = update_view_object()
-
-nb_docs = view.model.nb_docs
-
-layout = html.Div([
-    dcc.Store(id='store-all-docs-word',storage_type='session',clear_data=True),
-    dcc.Store(id='store-docs-word',storage_type='session',clear_data=True),
-    dcc.Store(id='nb-page-docs-word',storage_type='session',clear_data=True),
-    dcc.Store(id='nb-docs-for-word',storage_type='session',clear_data=True),
-    dcc.Store(id='nb-docs-for-word-2',storage_type='session',clear_data=True),
-    dbc.Row(
-        dbc.Col(html.Div(['Click to select a word']),width={"size": 10}),
-        justify='center'),
-    html.Br(),
-    dbc.Row(
-        dbc.Col(
-            dbc.Select(
-                id = 'word-selection',
-                options = [{'label': id,'value' : w} for w,id in view.model.corpus.index_words.items()],
-                value='1'
+def word_layout(view):
+    layout = html.Div([
+        dcc.Store(id='store-all-docs-word',storage_type='session',clear_data=True),
+        dcc.Store(id='store-docs-word',storage_type='session',clear_data=True),
+        dcc.Store(id='nb-page-docs-word',storage_type='session',clear_data=True),
+        dcc.Store(id='nb-docs-for-word',storage_type='session',clear_data=True),
+        dcc.Store(id='nb-docs-for-word-2',storage_type='session',clear_data=True),
+        dbc.Row(
+            dbc.Col(html.Div(['Click to select a word']),width={"size": 10}),
+            justify='center'),
+        html.Br(),
+        dbc.Row(
+            dbc.Col(
+                dbc.Select(
+                    id = 'word-selection',
+                    options = [{'label': id,'value' : w} for w,id in view.model.corpus.index_words.items()],
+                    value='1'
+                ),
+                width={"size": 10}
             ),
-            width={"size": 10}
-        ),
-        justify='center'
-        ),
-    dbc.Row(
-        dbc.Col([
-            html.Br(),
-            html.H3(id='word-id'),
-            html.Div(id = 'stats-word'),
-            html.Br(),
-            html.Br()
-        ],width={"size":10}),
-        justify='center'),
-    dbc.Row([
-        dbc.Col([
-            html.H5(id='title-docs-word'),
-            html.Br(),
-            html.Ul([html.Div(id = 'docs-word' + str(doc)) for doc in range(nb_docs)]),
-            dbc.Button('Previous',id='previous-docs-word',n_clicks=0),
-            dbc.Button('Next',id='next-docs-word',n_clicks=0),
-            html.Div(id='display-nb-docs-word')
+            justify='center'
+            ),
+        dbc.Row(
+            dbc.Col([
+                html.Br(),
+                html.H3(id='word-id'),
+                html.Div(id = 'stats-word'),
+                html.Br(),
+                html.Br()
+            ],width={"size":10}),
+            justify='center'),
+        dbc.Row([
+            dbc.Col([
+                html.H5(id='title-docs-word'),
+                html.Br(),
+                html.Ul([html.Div(id = 'docs-word' + str(doc)) for doc in range(nb_docs)]),
+                dbc.Button('Previous',id='previous-docs-word',n_clicks=0),
+                dbc.Button('Next',id='next-docs-word',n_clicks=0),
+                html.Div(id='display-nb-docs-word')
+                ],
+                width={"size": 5}),
+            dbc.Col([
+                html.H5('Proportion of time the word is assigned to each topic'),
+                dcc.Graph(id= 'freq-word'),
+                html.H6('Click on a bar to have more informations about a topic')
+                ],
+                width={"size": 5}),
             ],
-            width={"size": 5}),
-        dbc.Col([
-            html.H5('Proportion of time the word is assigned to each topic'),
-            dcc.Graph(id= 'freq-word'),
-            html.H6('Click on a bar to have more informations about a topic')
-            ],
-            width={"size": 5}),
-        ],
-        justify='center')  
-])
+            justify='center')  
+    ])
+    return layout
 
 @app.callback(Output('word-selection','value'),[Input('store-id-topic-word','data')])
 
@@ -82,6 +80,7 @@ def initialisation_word(word_id):
     [Input('word-selection','value')])
 
 def update_word(word_id):
+    view = update_view_object()[0]
     if word_id == '':
         raise PreventUpdate
     else:
@@ -100,6 +99,7 @@ outputs_word.append(Output('store-docs-word','data'))
 @app.callback(outputs_word,[Input('nb-page-docs-word','data'),Input('store-all-docs-word','data'),Input('nb-docs-for-word','data')])
 
 def update_list_doc(id_page,list_docs_word,nb_docs_for_word):
+    view = update_view_object()[0]
     if id_page == None:
         raise PreventUpdate
     ind = id_page*(nb_docs-1)+id_page
