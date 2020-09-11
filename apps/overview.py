@@ -27,7 +27,7 @@ layout = html.Div(children=[
                 html.Br(),
                 html.H3(id='title'),
                 html.Div(id='alert-overview',style={'display':'none'},children=[dbc.Alert('This view are not available because data is missing.',color='info')]),
-                html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph')]),
+                html.Div(id='graph-overview-container',children=[dcc.Graph(id='graph')],style={'cursor':'pointer'}),
                 html.Br(),
                 html.Br(),
                 html.Div(id='image-overview-container',style={"width":'70%','height':'70%'})
@@ -83,8 +83,15 @@ def update_view(btn1, btn2, btn3, btn4,btn5):
 @app.callback([Output('store-id-overview','data'),Output('store-path-overview', 'data')],[Input('graph','clickData')])
 
 def store_pathname_on_click(clickData):
-    if clickData == None:
+    if clickData == None :
         raise PreventUpdate
     else:
         return str(clickData['points'][0]['pointNumber']),'/topic'
 
+@app.callback(Output('graph','style'),[Input('graph','hoverData')])
+
+def update_cursor_on_hover(hoverData):
+    if hoverData == None :
+        raise PreventUpdate
+    else:
+        return {"cursor":'pointer'}

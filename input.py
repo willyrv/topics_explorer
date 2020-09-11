@@ -78,7 +78,7 @@ layout = html.Div([
     
 ])
 def build_model(name,contents,filename,date,nb_topics,nb_words=10,nb_docs=10):
-    content_type, content_string = contents.split(',')
+    content_string = contents.split(',')[1]
 
     decoded = base64.b64decode(content_string)
     
@@ -113,7 +113,7 @@ def build_model(name,contents,filename,date,nb_topics,nb_words=10,nb_docs=10):
     cloud.to_file(path + 'corpus.png')
 
     for i in range(view.model.number_topics):
-        freq_words = view.model.topic_word_matrix[0,:]
+        freq_words = view.model.topic_word_matrix[i,:]
         d = {view.model.corpus.word_for_id(id): freq_words[id] for id in range(len(view.model.corpus.index_words))} 
         cloud_top = wc.generate_from_frequencies(d)
         cloud_top.to_file(path + 'topic{}.png'.format(i))

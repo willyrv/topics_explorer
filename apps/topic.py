@@ -138,8 +138,11 @@ def update_lists_topic(id_page_doc,id_page_word,list_docs_topic,list_top_words):
     [Input('next-docs-topic','n_clicks'),Input('previous-docs-topic','n_clicks'),Input('next-top-words','n_clicks'),Input('previous-top-words','n_clicks')])
 
 def update_nb_page_list_topic(btn_next_doc,btn_prev_doc,btn_next_word,btn_prev_word):
-    if btn_next_doc-btn_prev_doc < 0 or btn_next_word-btn_prev_word < 0:
+    view = update_view_object()[0]
+    nb_page_doc = btn_next_doc-btn_prev_doc
+    nb_page_word = btn_next_word-btn_prev_word
+    if  nb_page_doc < 0 or  nb_page_word < 0:
         raise PreventUpdate
-    display_doc = 'Documents ' + str((btn_next_doc-btn_prev_doc)*nb_docs+1) + ' to ' + str((1+btn_next_doc-btn_prev_doc)*nb_docs)
-    display_word = 'Words ' + str((btn_next_word-btn_prev_word)*nb_words+1) + ' to ' + str((1+btn_next_word-btn_prev_word)*nb_words)
-    return display_doc, btn_next_doc-btn_prev_doc, display_word, btn_next_word-btn_prev_word
+    display_doc = 'Documents ' + str((nb_page_doc)*nb_docs+1) + ' to ' + str((1+nb_page_doc)*nb_docs) + ' of ' + str(view.model.corpus.size)
+    display_word = 'Words ' + str((nb_page_word)*nb_words+1) + ' to ' + str((1+nb_page_word)*nb_words) + ' of ' +  str(len(view.model.corpus.index_words))
+    return display_doc, nb_page_doc, display_word, nb_page_word

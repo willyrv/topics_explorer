@@ -14,17 +14,17 @@ from app import app
 df = pd.read_csv('available_datasets.csv',sep='|')
 
 layout = html.Div([
+    dbc.Row(dbc.Col([html.Br(),html.H3("Available datasets"),html.Br(),],width={"size":10}),justify='center'),
     dbc.Row(
         dbc.Col([
-            html.Br(),
-            html.H3("Available datasets"),
-            html.Br(),
             dash_table.DataTable(
                 id='table-corpus',
                 columns=[{"name": i, "id": i} for i in df.columns],
                 data=df.to_dict('records'),
                 row_selectable='single',
-                row_deletable=True
+                row_deletable=True,
+                style_cell={'textAlign':'center'},
+                style_header={'backgroundColor': 'rgb(230, 230, 230)','fontWeight': 'bold'}
             ),
             dcc.Interval(
                 id='interval-component',
@@ -32,19 +32,21 @@ layout = html.Div([
                 n_intervals=0
             ),
             dbc.ButtonGroup([
-                dbc.Button("Add",id='add-button',n_clicks=0),
+                dbc.Button("Upload a new dataset",id='add-button',n_clicks=0),
                 dbc.Button("Save",id='save-button',n_clicks=0)
             ],
             size='lg'),
-            html.Div(id="output-1",children="Press button to save changes"),
-            html.Br(),
-            html.Br(),
-            html.H5(id='selected-dataset')
+            
 
         ],
-        width={"size":10}
+        width={"size":8}
         ),
-        justify='center')
+        justify='center'),
+        dbc.Row(dbc.Col([
+            html.Ul(id="output-1",children=[html.Li("Choose a dataset by selecting a row"),html.Li("Press save to confirm changes such as dataset deletions")]),
+            html.Br(),
+            html.Br(),
+            html.H5(id='selected-dataset')],width={"size":10}),justify='center')
     
 
 ])
