@@ -94,8 +94,8 @@ def update_doc_selection(doc_id_topic,doc_id_word,list_related_docs,prev_view,*a
     Output('full-doc','children'),
     Output('store-all-related-docs','data'),
     Output('previous-related-docs','n_clicks'),
-    Output('next-related-docs','n_clicks')],
-    Output('freq-doc','figure'),
+    Output('next-related-docs','n_clicks'),
+    Output('freq-doc','figure')],
     [Input('doc-selection','value')])
 
 def update_doc(doc_id):
