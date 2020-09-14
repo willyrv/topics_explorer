@@ -145,6 +145,8 @@ def update_csv(input_name,input_description,choice_nb_topics,input_size,content,
             writer.writerow(myCsvRow)
             f.close()
         
-        children = build_model(name,content,filename,date,nb_topics)
-            
+        path = build_model(name,content,filename,date,nb_topics)
+        while not(os.path.exists(path + 'topic{}.png'.format(nb_topics-1))):
+            children = 'Wait'
+        children = 'Dataset ready'            
         return children
