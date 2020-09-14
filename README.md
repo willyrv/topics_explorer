@@ -1,6 +1,21 @@
 # Topics_explorer
 Tool for exploring underlying topics
 
+## Installation
+
+We recommend you to create a virtual environment to install all the necessary packages. To do so, please follow this steps: 
+
+```
+git clone https://github.com/willyrv/topics_explorer
+cd topics_explorer
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
+Then to lauch the application, please run the following command :
+```
+python index.py
+```
 ## Requirements 
 
 This browser is entirely written in Python (version 3.8) and requires the following components :
