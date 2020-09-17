@@ -23,7 +23,7 @@ We recommend you to create a virtual environment to install all the necessary pa
 git clone https://github.com/willyrv/topics_explorer
 cd topics_explorer
 python3 -m venv myvirtualenvironment
-source env/bin/activate
+source myvirtualenvironment/bin/activate
 pip install -r requirements.txt
 ```
 Then to lauch the application, please run the following command :
