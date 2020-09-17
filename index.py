@@ -11,12 +11,12 @@ import input
 
 from navbar import Navbar
 
-nav = Navbar()
+
 view = update_view_object()[0]
 
 app.layout = dbc.Container(
     html.Div([
-        nav,
+        html.Div(id='navbar'),
         dcc.Location(id='url',refresh=False),
         html.Br(),
         html.Div(id='page-content'),
@@ -75,29 +75,30 @@ def update_pathname(store_id_overview,store_path_overview,store_path_topic,store
         return str(c),'/topic','','unknown'
 
 
-@app.callback(Output('page-content', 'children'),[Input('url', 'pathname')])
+@app.callback([Output('page-content', 'children'),Output('navbar','children')],[Input('url', 'pathname')])
 
 def display_page(pathname):
 
     '''Method in a callback which permits to display the page corresponding to the url'''
     
     view = update_view_object()[0]
+    layout = '404'
     if pathname == '/':
-        return select_corpus.layout
+        layout = select_corpus.layout
     if pathname == '/overview':
-        return overview.layout
+        layout = overview.layout
     elif '/topic' in pathname:
-        return topic.topic_layout(view)
+        layout = topic.topic_layout(view)
     elif pathname == '/dictionary':
-        return dictionary.dictionary_layout(view)
+        layout = dictionary.dictionary_layout(view)
     elif pathname == '/doc':
-        return doc.doc_layout(view)
+        layout = doc.doc_layout(view)
     elif pathname == '/word':
-        return word.word_layout(view)
+        layout = word.word_layout(view)
     elif pathname == '/upload':
-        return input.layout
-    else:
-        return '404'
+        layout = input.layout
+    return layout, Navbar(view)
+
 
 if __name__ == '__main__':
     app.run_server(debug=False)

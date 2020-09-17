@@ -3,11 +3,9 @@ from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
 
 
-from app import app, update_view_object
+from app import app
 
-view, path = update_view_object()
-
-def Navbar():
+def Navbar(view):
 
     '''Create the Navigation bar which is visible at the top of the application in each page.'''
     
