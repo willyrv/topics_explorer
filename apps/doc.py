@@ -77,6 +77,9 @@ inputs_doc.insert(3,Input('previous-view','data'))
 @app.callback(Output('doc-selection','value'),inputs_doc)
 
 def update_doc_selection(doc_id_topic,doc_id_word,list_related_docs,prev_view,*args):
+
+    '''Method in a callback which permits to pass on the doc id after a click event triggered by the user on topic,document or word page.'''
+
     ctx = dash.callback_context
     c = ctx.triggered[0]['prop_id'].split('.')[0]
     if (prev_view=='topic' and doc_id_topic=='') or (prev_view=='word' and doc_id_word=='') or c =='store-related-docs':
@@ -98,7 +101,10 @@ def update_doc_selection(doc_id_topic,doc_id_word,list_related_docs,prev_view,*a
     Output('freq-doc','figure')],
     [Input('doc-selection','value')])
 
-def update_doc(doc_id):
+def update_doc_page(doc_id):
+
+    '''Method in a callback whose goal is to display the informations corresponding to the selected document.'''
+
     view = update_view_object()[0]
 
     if doc_id == None or doc_id == '':
@@ -116,6 +122,9 @@ outputs_doc.append(Output('store-related-docs','data'))
 @app.callback(outputs_doc,[Input('nb-page-list-related-docs','data'),Input('store-all-related-docs','data')])
 
 def update_list_doc(id_page,list_related_docs):
+
+    '''Method in a callback which updates the list of related documents to the selected document.'''
+
     view = update_view_object()[0]
     if id_page == None:
         raise PreventUpdate
@@ -128,6 +137,9 @@ def update_list_doc(id_page,list_related_docs):
 @app.callback([Output('display-nb-page-doc','children'),Output('nb-page-list-related-docs','data')],[Input('next-related-docs','n_clicks'),Input('previous-related-docs','n_clicks')])
 
 def update_nb_page_list(btn_next,btn_prev):
+
+    '''Method in a callback which permits to display the next related documents after a click on the next or the previous button.'''
+    
     view = update_view_object()[0]
     nb_page = btn_next - btn_prev
     if nb_page < 0:
@@ -137,10 +149,10 @@ def update_nb_page_list(btn_next,btn_prev):
 @app.callback([Output('store-id-doc','data'),Output('store-path-doc', 'data')],[Input('freq-doc','clickData')])
 
 def store_pathname(clickData):
+
+    '''Method in a callback whose goal is to store the informations after a click event triggered by the user'''
+
     if clickData == None:
         raise PreventUpdate
     else:
         return str(clickData['points'][0]['pointNumber']),'/topic'
-
-
-

@@ -8,6 +8,9 @@ from dash.exceptions import PreventUpdate
 from app import app, update_view_object,nb_docs
 
 def word_layout(view):
+
+    '''Create the layout of the word page.'''
+
     layout = html.Div([
         dcc.Store(id='store-all-docs-word',storage_type='session',clear_data=True),
         dcc.Store(id='store-docs-word',storage_type='session',clear_data=True),
@@ -62,6 +65,9 @@ def word_layout(view):
 @app.callback(Output('word-selection','value'),[Input('store-id-topic-word','data')])
 
 def initialisation_word(word_id):
+
+    '''Method in a callback which permits to update the selected word based on the word that the user clicks on, on topic page.'''
+
     if word_id == '' or word_id == None:
         return '1'
     else :
@@ -80,6 +86,9 @@ def initialisation_word(word_id):
     [Input('word-selection','value')])
 
 def update_word(word_id):
+
+    '''Method in a callback whose purpose is to display the word page based on the selected word.'''
+
     view = update_view_object()[0]
     if word_id == '':
         raise PreventUpdate
@@ -99,6 +108,9 @@ outputs_word.append(Output('store-docs-word','data'))
 @app.callback(outputs_word,[Input('nb-page-docs-word','data'),Input('store-all-docs-word','data'),Input('nb-docs-for-word','data')])
 
 def update_list_doc(id_page,list_docs_word,nb_docs_for_word):
+
+    '''Method in a callback which updates the list of documents containing the selected word.''' 
+
     view = update_view_object()[0]
     if id_page == None:
         raise PreventUpdate
@@ -119,6 +131,9 @@ def update_list_doc(id_page,list_docs_word,nb_docs_for_word):
     Input('nb-docs-for-word-2','data')])
 
 def update_nb_page_docs_word(btn_next,btn_prev,nb_docs_for_word):
+
+    '''Method in a callback which permits to display the next documents containing the selected word after a click on the next or the previous button.'''
+
     nb_page = btn_next-btn_prev
     if nb_page < 0 or ((nb_page-1)*nb_docs+1) > (nb_docs_for_word - (nb_docs-1)):
         raise PreventUpdate

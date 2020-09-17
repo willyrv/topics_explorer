@@ -4,11 +4,12 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input,Output
 from dash.exceptions import PreventUpdate
-import copy
 
 from app import app,update_view_object,nb_docs,nb_words
 
 def topic_layout(view):
+
+    '''Create the layout of the topic page.'''
 
     layout = html.Div(children=[
         dcc.Store(id='store-all-top-words',storage_type='session',clear_data=True),
@@ -80,6 +81,9 @@ def topic_layout(view):
     [Input('url','search')])
 
 def update_topic_page(topic_id):
+
+    '''Method in a callback whose goal is to display the informations corresponding to the selected topic.'''
+
     view, path = update_view_object()
     if topic_id == None or topic_id == '':
         topic_id = '0'
@@ -101,7 +105,11 @@ inputs_topic.insert(0,Input('store-top-words','data'))
 inputs_topic.insert(1,Input('store-docs-topic','data'))
 
 @app.callback([Output('store-id-topic-word','data'),Output('store-id-topic-doc','data'),Output('store-path-topic','data')],inputs_topic)
-def click_on_words(list_words,list_docs,*args):
+
+def click_on_lists(list_words,list_docs,*args):
+
+    '''Method in a callback whose goal is to store the informations after a click event triggered by the useron the top words list or the related documents list.'''
+
     view = update_view_object()[0]
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if changed_id[0] == 'w':
@@ -118,6 +126,9 @@ outputs_topic2.append(Output('store-top-words','data'))
 @app.callback(outputs_topic2,[Input('nb-page-docs-topic','data'),Input('nb-page-top-words','data'),Input('store-all-docs-topic','data'),Input('store-all-top-words','data')])
 
 def update_lists_topic(id_page_doc,id_page_word,list_docs_topic,list_top_words):
+
+    '''Method in a callback which updates the list of related documents and top words of the selected topic.'''
+
     view = update_view_object()[0]
     if id_page_doc == None or id_page_word ==  None:
         raise PreventUpdate
@@ -138,6 +149,9 @@ def update_lists_topic(id_page_doc,id_page_word,list_docs_topic,list_top_words):
     [Input('next-docs-topic','n_clicks'),Input('previous-docs-topic','n_clicks'),Input('next-top-words','n_clicks'),Input('previous-top-words','n_clicks')])
 
 def update_nb_page_list_topic(btn_next_doc,btn_prev_doc,btn_next_word,btn_prev_word):
+
+    '''Method in a callback which permits to display the next related documents after a click on the next or the previous button.'''
+
     view = update_view_object()[0]
     nb_page_doc = btn_next_doc-btn_prev_doc
     nb_page_word = btn_next_word-btn_prev_word
@@ -145,4 +159,5 @@ def update_nb_page_list_topic(btn_next_doc,btn_prev_doc,btn_next_word,btn_prev_w
         raise PreventUpdate
     display_doc = 'Documents ' + str((nb_page_doc)*nb_docs+1) + ' to ' + str((1+nb_page_doc)*nb_docs) + ' of ' + str(view.model.corpus.size)
     display_word = 'Words ' + str((nb_page_word)*nb_words+1) + ' to ' + str((1+nb_page_word)*nb_words) + ' of ' +  str(len(view.model.corpus.index_words))
+    
     return display_doc, nb_page_doc, display_word, nb_page_word

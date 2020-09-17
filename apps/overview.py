@@ -44,6 +44,9 @@ layout = html.Div(children=[
               [Input('wordcloud-button','n_clicks'),Input('table-button','n_clicks'),Input('scaled-button', 'n_clicks'),Input('racing-bar-button', 'n_clicks'),Input('stacked-button', 'n_clicks')])
 
 def update_view(btn1, btn2, btn3, btn4,btn5):
+
+    '''Method in a callback which changes the view when the user clicks on a button.'''
+
     view, path = update_view_object()
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     display_image = {'display':'none'}
@@ -83,6 +86,8 @@ def update_view(btn1, btn2, btn3, btn4,btn5):
 @app.callback([Output('store-id-overview','data'),Output('store-path-overview', 'data')],[Input('graph','clickData')])
 
 def store_pathname_on_click(clickData):
+
+    '''Method in a callback which stores the informations after a click event triggered by the user.'''
     if clickData == None :
         raise PreventUpdate
     else:
@@ -91,6 +96,9 @@ def store_pathname_on_click(clickData):
 @app.callback(Output('graph','style'),[Input('graph','hoverData')])
 
 def update_cursor_on_hover(hoverData):
+
+    '''Method in a callback which changes the cursor on hover on the graph.'''
+    
     if hoverData == None :
         raise PreventUpdate
     else:

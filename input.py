@@ -78,6 +78,9 @@ layout = html.Div([
     
 ])
 def build_model(name,contents,filename,date,nb_topics,nb_words=10,nb_docs=10):
+
+    '''Create a pickle file containing a view object based on the dataset that the user has uploaded and the wordclouds for the entire corpus and all the topics. All of this files are stocked in a folder named after the input name and the number of topics which can be found in the folder assets'''
+
     content_string = contents.split(',')[1]
 
     decoded = base64.b64decode(content_string)
@@ -125,7 +128,11 @@ def build_model(name,contents,filename,date,nb_topics,nb_words=10,nb_docs=10):
               [Input('dataset-name','children'),Input('dataset-description','children'),Input('choice-nb-topics','children'),Input('size-corpus','children'),Input('upload-data', 'contents')],
               [State('upload-data', 'filename'),
                State('upload-data', 'last_modified')])
+
 def update_csv(input_name,input_description,choice_nb_topics,input_size,content, filename, date):
+
+    '''Method in a callback which permits to update the csv file available_datasets by saving the informations that the user has entered when he uploaded his dataset'''
+
     if not(os.path.exists('available_datasets.csv')):
         header = ['name', 'description', 'size','number_topics','loading']
         with open('available_datasets.csv', 'wt', newline ='') as file:

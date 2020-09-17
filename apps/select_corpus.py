@@ -54,6 +54,9 @@ layout = html.Div([
 @app.callback(Output('selected-dataset','children'),[Input('table-corpus','derived_virtual_data'),Input('table-corpus','derived_virtual_selected_rows')])
 
 def update_choice_corpus(rows,selection):
+
+    '''Method in a callback which saves the selected dataset in order to display the corresponding topics model'''
+
     if selection == None or rows==None or selection == []:
         raise PreventUpdate
     else : 
@@ -65,6 +68,9 @@ def update_choice_corpus(rows,selection):
 @app.callback(Output('store-path-select-corpus','data'),[Input('add-button','n_clicks')])
 
 def update_page_with_add_button(btn):
+
+    '''Method in a callback which permits to navigate to the upload page when the user clicks on add button.'''
+
     if btn==0:
         raise PreventUpdate
     else:
@@ -76,7 +82,7 @@ def update_page_with_add_button(btn):
         [State("table-corpus","data")]
         )
 
-def selected_data_to_csv(nclicks,table): 
+def selected_data_to_csv(nclicks,table):
     if nclicks == 0:
         raise PreventUpdate
     else:
@@ -86,6 +92,9 @@ def selected_data_to_csv(nclicks,table):
 @app.callback(Output('table-corpus', 'data'),
               [Input('interval-component', 'n_intervals')])
 def update_table(n):
+
+    '''Method in a callback which permits to delete the folder corresponding to the delete action of the user on the dash table.'''
+
     df = pd.read_csv('available_datasets.csv',sep='|')
     for dataset_name in os.listdir("assets"):
         if not(dataset_name=='demo'):

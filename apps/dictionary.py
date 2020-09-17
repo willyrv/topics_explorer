@@ -7,6 +7,9 @@ from dash.exceptions import PreventUpdate
 from app import app, update_view_object
 
 def dictionary_layout(view):
+
+    '''Index of all the words'''
+
     layout = dbc.Row([
         dbc.Col(
             html.Div([

@@ -51,6 +51,9 @@ inputs_index.insert(7,Input('store-path-select-corpus','data'))
 @app.callback([Output('url','search'),Output('url','pathname'),Output('store-id-doc-word','data'),Output('previous-view','data')],inputs_index)
 
 def update_pathname(store_id_overview,store_path_overview,store_path_topic,store_id_word,store_path_word,store_id_doc,store_path_doc,store_path_select_corpus,*args):
+
+    '''Method in a callback whose goal is to update the url after a click event triggered by the user. It works with some Store dash components which permits to save the context of the click event.'''
+
     ctx = dash.callback_context
     c = ctx.triggered[0]['prop_id'].split('.')[0]
     if not ctx.triggered or ((c =='store-id-overview' or c =='store-path-overview') and store_id_overview==None) or (c =='store-id-word' or c =='store-path-word') and (store_id_word==None) or ((c =='store-id-doc' or c =='store-path-doc') and store_id_doc==None) or (c =='store-path-select-corpus' and store_path_select_corpus==None):
@@ -75,6 +78,9 @@ def update_pathname(store_id_overview,store_path_overview,store_path_topic,store
 @app.callback(Output('page-content', 'children'),[Input('url', 'pathname')])
 
 def display_page(pathname):
+
+    '''Method in a callback which permits to display the page corresponding to the url'''
+    
     view = update_view_object()[0]
     if pathname == '/':
         return select_corpus.layout
@@ -94,4 +100,4 @@ def display_page(pathname):
         return '404'
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)

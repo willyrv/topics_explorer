@@ -7,12 +7,18 @@ import plotly.graph_objects as go
 colors = ['#FF0000','#FFFF00','#FF00FF','#00FFFF','#800000','#008000','#808000','#800080','#008080','#C0C0C0','#808080','#9999FF','#993366','#FF8080','#0066CC','#CCCCFF','#000080','#00CCFF','#CCFFCC','#FFFF99','#FF99CC','#FFCC00','#FF9900','#FF6600','#666699','#969696','#003366','#333333','#339966','#003300','#333300','#993300','#333399','#0000FF','#99CCFF','#CC99FF','#FFCC99','#3366FF','#33CCCC','#99CC00','#00FF00']
 
 class Views(object):
+
+    '''view object permits to create all the available graphs in the application. Each graph is a figure object build with the librairy plotly.'''
+
     def __init__(self,topic_model):
         
-        self.model = topic_model
-        self.colors = colors[:self.model.number_topics]
+        self.model = topic_model #: A TopicModel object
+        self.colors = colors[:self.model.number_topics] #: vector with all the colors' references for each topic
         
     def scaled_topics(self):
+
+        '''Create a graph with a colored buble for each topic using 2-dimensional coordinates based on distance between topics. Each buble's size is proportional to the importance of the topic in the corpus. On hover, you can see the top words of the selected topic'''
+
         scaled = go.Figure(data=[go.Scatter(
             x=self.model.topic_coordinates[:,0], 
             y=self.model.topic_coordinates[:,1],
@@ -38,6 +44,9 @@ class Views(object):
         
         
     def frequency_topic_evolution(self,topic_id):
+
+        '''Create a histogram where each bar represents the proportion of the topic for a precise year.''' 
+
         if self.model.corpus.dates==False:
             raise Exception('dates are missing')
         fig = go.Figure(
@@ -53,6 +62,9 @@ class Views(object):
         return fig
 
     def frequency_word_topics(self,word_id):
+
+        '''Create a histogram with the proportion of each topic for a selected word''' 
+
         fig = go.Figure(
             data=[go.Bar(
                 x=[i for i in range(self.model.number_topics)],
@@ -68,6 +80,9 @@ class Views(object):
         return fig
 
     def frequency_doc_topics(self,doc_id):
+
+        '''Create a histogram with the proportion of each topic for a selected document''' 
+
         fig = go.Figure(
             data=[go.Bar(
                 x=[i for i in range(self.model.number_topics)],
@@ -84,6 +99,9 @@ class Views(object):
 
     
     def racing_bar_graph(self):
+
+        '''Create an animated histogram which can be controlled by a play and a pause button and which represents the frequency evolution of each topic over years'''
+
         if self.model.corpus.dates==False:
             raise Exception('dates are missing')
         # make figure
@@ -199,6 +217,9 @@ class Views(object):
         
 
     def streamgraph(self):
+
+        '''Create a graph where the evolution of the proportion of the topics is represented by the place taking by the topic.''' 
+
         if self.model.corpus.dates==False:
             raise Exception('dates are missing')
         freq_matrix = self.model.topics_cumulative_frequencies
@@ -245,6 +266,9 @@ class Views(object):
         return streamgraph
 
     def table(self):
+
+        '''Table with 3 columns containing the number of the topics, their top words and their proportion in the corpus'''
+
         table = go.Figure(data=[go.Table(
             columnorder= [1,2,3,4],
             columnwidth=[50,500,100,100],

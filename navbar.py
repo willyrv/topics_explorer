@@ -8,6 +8,9 @@ from app import app, update_view_object
 view, path = update_view_object()
 
 def Navbar():
+
+    '''Create the Navigation bar which is visible at the top of the application in each page.'''
+    
     navbar = dbc.NavbarSimple(
         children=[
             dbc.NavItem(dbc.NavLink("Overview",href="/overview")),
