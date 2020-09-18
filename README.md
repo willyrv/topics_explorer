@@ -42,6 +42,18 @@ id	title	            text                                    date
 ```
 When a new file is uploaded, users can choose the number of topics they want and then, a topics model is created using LDA and save into a folder in local and can be find in the assets folder. Users have the possibility to choose the topics model they want to explore between the uploaded datasets.
 
+## Documentation
+
+All the necessary files to update the documentation using sphinx autodocs can be found in the documentation_generator folder. A current version of the documentation can be seen by looking at the following html file :
+```
+documentation_generator/build/html/index.html
+```
+To update this file, you have to execut this command :
+```
+cd documentation_generator
+make html
+```
+
 ## Requirements 
 
 This browser is entirely written in Python (version 3.8) and requires the following components :
