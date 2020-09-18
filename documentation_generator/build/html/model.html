@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>model package &mdash; Topics explorer 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Topics explorer
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">model package</a><ul>
+<li><a class="reference internal" href="#module-model.corpus">model.corpus module</a></li>
+<li><a class="reference internal" href="#module-model.topic_model">model.topic_model module</a></li>
+<li><a class="reference internal" href="#module-model.visualisation">model.visualisation module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Topics explorer</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>model package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/model.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="model-package">
+<h1>model package<a class="headerlink" href="#model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-model.corpus">
+<span id="model-corpus-module"></span><h2>model.corpus module<a class="headerlink" href="#module-model.corpus" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model.corpus.Corpus">
+<em class="property">class </em><code class="sig-prename descclassname">model.corpus.</code><code class="sig-name descname">Corpus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">language</span><span class="o">=</span><span class="default_value">'english'</span></em>, <em class="sig-param"><span class="n">dates</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.corpus.Corpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>corpus object contains informations on the dataset before the topics modelling</p>
+<dl class="py method">
+<dt id="model.corpus.Corpus.date">
+<code class="sig-name descname">date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.corpus.Corpus.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the document’s year given the id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.corpus.Corpus.full_text">
+<code class="sig-name descname">full_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.corpus.Corpus.full_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the entire document given its id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.corpus.Corpus.id_for_word">
+<code class="sig-name descname">id_for_word</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.corpus.Corpus.id_for_word" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the id given the word</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.corpus.Corpus.title">
+<code class="sig-name descname">title</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.corpus.Corpus.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the document’s title given its id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.corpus.Corpus.word_for_id">
+<code class="sig-name descname">word_for_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.corpus.Corpus.word_for_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the word given its id</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.corpus.Corpus.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#model.corpus.Corpus.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>dataframe with 4 columns : id, title,text,date containing all the documents</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.corpus.Corpus.index_words">
+<code class="sig-name descname">index_words</code><a class="headerlink" href="#model.corpus.Corpus.index_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>index of all the considered words</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.corpus.Corpus.size">
+<code class="sig-name descname">size</code><a class="headerlink" href="#model.corpus.Corpus.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of documents in the corpus</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.corpus.Corpus.vector_space_data">
+<code class="sig-name descname">vector_space_data</code><a class="headerlink" href="#model.corpus.Corpus.vector_space_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>vector representation of the documents with n coordinates (n being the number of considered words)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.topic_model">
+<span id="model-topic-model-module"></span><h2>model.topic_model module<a class="headerlink" href="#module-model.topic_model" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model.topic_model.TopicModel">
+<em class="property">class </em><code class="sig-prename descclassname">model.topic_model.</code><code class="sig-name descname">TopicModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">corpus</span></em>, <em class="sig-param"><span class="n">number_topics</span></em>, <em class="sig-param"><span class="n">nb_words</span></em>, <em class="sig-param"><span class="n">nb_docs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Treatment of the LDA results</p>
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.closest_docs">
+<code class="sig-name descname">closest_docs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.closest_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the documents sorted from the closest to the most different documents with the document in argument as a reference</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.display_top_words_1topic">
+<code class="sig-name descname">display_top_words_1topic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic_id</span></em>, <em class="sig-param"><span class="n">nb_words</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.display_top_words_1topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>display the nb_words top words for the topic in argument</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.docs_for_word">
+<code class="sig-name descname">docs_for_word</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.docs_for_word" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list with the ids of all the documents containing the word in argument</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.frequency_doc_for_topics">
+<code class="sig-name descname">frequency_doc_for_topics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.frequency_doc_for_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the same as topic_distribution_for_doc but in percentages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.frequency_word_for_topics">
+<code class="sig-name descname">frequency_word_for_topics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.frequency_word_for_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the same as topic_distribution_for_word but in percentages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.nb_docs_for_word">
+<code class="sig-name descname">nb_docs_for_word</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.nb_docs_for_word" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the number of docs containing the word in argument</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.topic_distribution_for_doc">
+<code class="sig-name descname">topic_distribution_for_doc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.topic_distribution_for_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the distribution of topics for the document in argument</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.topic_distribution_for_word">
+<code class="sig-name descname">topic_distribution_for_word</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.topic_distribution_for_word" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the distribution of topics for the word in argument</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.topic_frequency_per_dates">
+<code class="sig-name descname">topic_frequency_per_dates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic_id</span></em>, <em class="sig-param"><span class="n">date</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.topic_frequency_per_dates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model.topic_model.TopicModel.word_distribution_for_topic">
+<code class="sig-name descname">word_distribution_for_topic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.topic_model.TopicModel.word_distribution_for_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the distribution of words for the topic in argument</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.corpus">
+<code class="sig-name descname">corpus</code><a class="headerlink" href="#model.topic_model.TopicModel.corpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>a Corpus object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.document_topic_matrix">
+<code class="sig-name descname">document_topic_matrix</code><a class="headerlink" href="#model.topic_model.TopicModel.document_topic_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>matrix of dimension D*K (D : number of documents,K : number of topics) containing the distribution of topics for each document</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.nb_docs">
+<code class="sig-name descname">nb_docs</code><a class="headerlink" href="#model.topic_model.TopicModel.nb_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of displayed documents in the lists in topic,doc and word page</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.nb_words">
+<code class="sig-name descname">nb_words</code><a class="headerlink" href="#model.topic_model.TopicModel.nb_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of displayed words in the lists in topic,doc and word page</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.number_topics">
+<code class="sig-name descname">number_topics</code><a class="headerlink" href="#model.topic_model.TopicModel.number_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of topics of the model</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.related_docs">
+<code class="sig-name descname">related_docs</code><a class="headerlink" href="#model.topic_model.TopicModel.related_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>square matrix with sorted documents from the closest one to the most different one for each document</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.top_docs_all_topics">
+<code class="sig-name descname">top_docs_all_topics</code><a class="headerlink" href="#model.topic_model.TopicModel.top_docs_all_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>list containing  K lists with the documents classified by importance for each topic</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.top_words_all_topics">
+<code class="sig-name descname">top_words_all_topics</code><a class="headerlink" href="#model.topic_model.TopicModel.top_words_all_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>list containing  K lists with the words classified by importance for each topic</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.topic_coordinates">
+<code class="sig-name descname">topic_coordinates</code><a class="headerlink" href="#model.topic_model.TopicModel.topic_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>matrix of 2-dimensional coordinates for each topic based on the distance between the topics</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.topic_word_matrix">
+<code class="sig-name descname">topic_word_matrix</code><a class="headerlink" href="#model.topic_model.TopicModel.topic_word_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>matrix of dimension K*N (K : number of topics, N : number of words) containing the distribution of words for each topic</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.topics_cumulative_frequencies">
+<code class="sig-name descname">topics_cumulative_frequencies</code><a class="headerlink" href="#model.topic_model.TopicModel.topics_cumulative_frequencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>same as topics_frequency_per_dates but with cumulative frequencies</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.topics_frequency_per_dates">
+<code class="sig-name descname">topics_frequency_per_dates</code><a class="headerlink" href="#model.topic_model.TopicModel.topics_frequency_per_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>matrix of dimension K*Y (K: number of topics, Y: number of years) containing the frequency of each topic for each year.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.topic_model.TopicModel.topics_proportion">
+<code class="sig-name descname">topics_proportion</code><a class="headerlink" href="#model.topic_model.TopicModel.topics_proportion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector with the proportion of each topic in the corpus</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.visualisation">
+<span id="model-visualisation-module"></span><h2>model.visualisation module<a class="headerlink" href="#module-model.visualisation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model.visualisation.Views">
+<em class="property">class </em><code class="sig-prename descclassname">model.visualisation.</code><code class="sig-name descname">Views</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic_model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>view object permits to create all the available graphs in the application. Each graph is a figure object build with the librairy plotly.</p>
+<dl class="py method">
+<dt id="model.visualisation.Views.frequency_doc_topics">
+<code class="sig-name descname">frequency_doc_topics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views.frequency_doc_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a histogram with the proportion of each topic for a selected document</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.visualisation.Views.frequency_topic_evolution">
+<code class="sig-name descname">frequency_topic_evolution</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views.frequency_topic_evolution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a histogram where each bar represents the proportion of the topic for a precise year.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.visualisation.Views.frequency_word_topics">
+<code class="sig-name descname">frequency_word_topics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views.frequency_word_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a histogram with the proportion of each topic for a selected word</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.visualisation.Views.racing_bar_graph">
+<code class="sig-name descname">racing_bar_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views.racing_bar_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an animated histogram which can be controlled by a play and a pause button and which represents the frequency evolution of each topic over years</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.visualisation.Views.scaled_topics">
+<code class="sig-name descname">scaled_topics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views.scaled_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a graph with a colored buble for each topic using 2-dimensional coordinates based on distance between topics. Each buble’s size is proportional to the importance of the topic in the corpus. On hover, you can see the top words of the selected topic</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.visualisation.Views.streamgraph">
+<code class="sig-name descname">streamgraph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views.streamgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a graph where the evolution of the proportion of the topics is represented by the place taking by the topic.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model.visualisation.Views.table">
+<code class="sig-name descname">table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.visualisation.Views.table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table with 3 columns containing the number of the topics, their top words and their proportion in the corpus</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.visualisation.Views.colors">
+<code class="sig-name descname">colors</code><a class="headerlink" href="#model.visualisation.Views.colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>vector with all the colors’ references for each topic</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="model.visualisation.Views.model">
+<code class="sig-name descname">model</code><a class="headerlink" href="#model.visualisation.Views.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A TopicModel object</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Lucile Vallet
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
