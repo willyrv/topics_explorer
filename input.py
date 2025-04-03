@@ -5,11 +5,10 @@ import os
 
 import dash
 from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
-import dash_table
+from dash import dash_table
 
 import pandas as pd
 import csv
@@ -32,7 +31,7 @@ layout = html.Div([
         html.Br(),
         dbc.InputGroup(
             [
-                dbc.InputGroupAddon("Dataset's name", addon_type="prepend"),
+                dbc.InputGroupText("Dataset's name"),
                 dbc.Input()            
             ],
             className="mb-3",
@@ -40,7 +39,7 @@ layout = html.Div([
         ),
         dbc.InputGroup(
             [
-                dbc.InputGroupAddon("Description", addon_type="prepend"),
+                dbc.InputGroupText("Description"),
                 dbc.Textarea()            
             ],
             className="mb-3",
@@ -48,7 +47,7 @@ layout = html.Div([
         ),
         dbc.InputGroup(
             [
-                dbc.InputGroupAddon("Number of documents", addon_type="prepend"),
+                dbc.InputGroupText("Number of documents"),
                 dbc.Input(type="number")            
             ],
             className="mb-3",
@@ -56,7 +55,7 @@ layout = html.Div([
         ),
         dbc.InputGroup(
             [
-                dbc.InputGroupAddon("Number of topics", addon_type="prepend"),
+                dbc.InputGroupText("Number of topics"),
                 dbc.Input(type="number")            
             ],
             className="mb-3",
